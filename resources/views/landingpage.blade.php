@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="{{ asset('img/logo.png') }}">
-    <title>{{ config('app.name', 'ScholarHub') }} - Christ the King College</title> <!-- Tailwind CSS Play CDN -->
+    <title>{{ config('app.name', 'ScholarHub') }} - Christ the King College</title>
     <script src="{{ asset('css/tailwind.css') }}"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;500;600;700;800&display=swap"
         rel="stylesheet">
@@ -17,513 +17,349 @@
 </head>
 
 <body class="bg-slate-50 text-slate-800 antialiased scroll-smooth">
-    <!-- Main Header Bar (Sticky) -->
-    <header class="sticky top-0 z-50 bg-slate-50/90 backdrop-blur-md border-b border-slate-200/50">
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80">
         <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
             <!-- Brand Logo -->
             <a href="#" class="flex items-center space-x-3">
-                <div class="w-12 h-12 flex items-center justify-center overflow-hidden shrink-0">
-                    <img src="{{ asset('img/logo.png') }}" alt="Christ the King College Logo"
-                        class="w-full h-full object-contain p-1">
+                <div class="w-10 h-10 flex items-center justify-center overflow-hidden shrink-0">
+                    <img src="{{ asset('img/logo.png') }}" alt="CKC Logo" class="w-full h-full object-contain">
                 </div>
                 <div>
-                    <span class="text-slate-900 font-extrabold text-lg tracking-tight block leading-none">CKC
-                        ScholarHub</span>
-                    <span class="text-[10px] text-slate-400 font-semibold tracking-wider uppercase">Faith &middot;
-                        Excellence &middot; Service</span>
+                    <span class="text-slate-900 font-extrabold text-base tracking-tight block leading-none">CKC ScholarHub</span>
+                    <span class="text-[10px] text-slate-400 font-semibold tracking-wider uppercase">Christ the King College</span>
                 </div>
             </a>
 
             <!-- Navigation Links -->
             <nav class="hidden md:flex items-center space-x-8 text-sm font-semibold text-slate-600">
-                <a href="#" class="hover:text-blue-600 transition">Home</a>
-                <a href="#about" class="hover:text-blue-600 transition">About</a>
+                <a href="#" class="hover:text-blue-600 transition">About</a>
                 <a href="#scholarships" class="hover:text-blue-600 transition">Scholarships</a>
-                <a href="#how-to-apply" class="hover:text-blue-600 transition">Requirements</a>
+                <a href="#apply" class="hover:text-blue-600 transition">Apply</a>
                 <a href="#contact" class="hover:text-blue-600 transition">Contact</a>
             </nav>
 
             <!-- CTA Actions -->
             <div class="flex items-center space-x-3">
-                <a href="{{ route('login') }}"
-                    class="text-sm font-bold text-slate-700 hover:text-blue-600 px-4 py-2 transition">
-                    Student Login
+                <a href="{{ route('register') }}"
+                    class="text-xs font-bold text-slate-700 hover:text-blue-600 px-3 py-2 transition">
+                    Register
                 </a>
                 <a href="{{ route('login', ['role' => 'office']) }}"
-                    class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold px-5 py-2.5 rounded-xl shadow-md shadow-blue-500/10 transition">
+                    class="text-xs font-bold text-slate-700 hover:text-blue-600 px-3 py-2 transition">
                     Scholarship Office
                 </a>
+                <a href="{{ route('login') }}"
+                    class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md transition">
+                    Student Login
+                </a>
             </div>
-        </div>
         </div>
     </header>
 
-    <!-- 2. Hero Section -->
-    <section
-        class="bg-gradient-to-br from-blue-700 via-blue-600 to-blue-800 text-white py-20 px-6 relative overflow-hidden">
-        <div
-            class="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.1),transparent)] pointer-events-none">
-        </div>
-        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
-
-            <!-- Left Info Section -->
-            <div class="lg:col-span-7 space-y-6">
-                <div
-                    class="inline-flex items-center space-x-2 bg-blue-500/20 text-blue-100 px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
-                        stroke="currentColor" class="w-3.5 h-3.5 text-amber-400">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z" />
-                    </svg>
-                    <span>Official Scholarship Portal of CKC</span>
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-700 text-white py-20 px-6 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto space-y-12 relative z-10">
+            <!-- Hero Header Text -->
+            <div class="max-w-2xl space-y-6">
+                <div class="inline-flex items-center space-x-2 bg-amber-400/20 text-amber-300 border border-amber-400/30 px-3 py-1 rounded-full text-xs font-semibold">
+                    <span>Application Open &middot; AY {{ date('Y') }}-{{ date('Y') + 1 }}</span>
                 </div>
                 <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
-                    Welcome to <br><span class="text-amber-400">CKC ScholarHub</span>
+                    Empowering Students <br><span class="text-amber-400">Through Scholarships</span>
                 </h1>
-                <p class="text-blue-100/90 text-lg leading-relaxed max-w-xl">
-                    The official student scholarship management system of Christ the King College, Gingoog City.
-                    Apply, track, and manage your scholarships all in one place.
+                <p class="text-blue-100/90 text-base md:text-lg leading-relaxed max-w-xl">
+                    CKC ScholarHub streamlines scholarship management at Christ the King College — from application to approval, all in one platform.
                 </p>
 
-                <div
-                    class="flex flex-col sm:flex-row items-stretch sm:items-center space-y-3 sm:space-y-0 sm:space-x-4 pt-4">
+                <div class="flex flex-wrap items-center gap-4 pt-2">
+                    <a href="{{ route('register') }}"
+                        class="bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold px-6 py-3 rounded-xl shadow-lg transition text-sm">
+                        Apply Now
+                    </a>
                     <a href="#scholarships"
-                        class="bg-white text-blue-700 hover:bg-blue-50 text-center font-bold px-8 py-3.5 rounded-xl shadow-lg transition">
-                        View Programs
+                        class="bg-white/10 hover:bg-white/20 text-white font-semibold px-6 py-3 rounded-xl border border-white/20 transition text-sm">
+                        View Scholarships
                     </a>
-                    <a href="{{ route('login') }}"
-                        class="bg-blue-500/30 hover:bg-blue-500/40 text-white text-center font-bold px-8 py-3.5 rounded-xl border border-white/10 transition flex items-center justify-center space-x-2">
-                        <span>Student Login</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
-                            stroke="currentColor" class="w-4 h-4">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                        </svg>
-                    </a>
-                </div>
-
-                <!-- Dashboard Quick Metrics -->
-                <div class="grid grid-cols-3 gap-6 pt-10 border-t border-white/10 max-w-lg">
-                    <div>
-                        <p class="text-3xl font-black text-white">—</p>
-                        <p class="text-xs text-blue-200/80 uppercase tracking-wider font-bold mt-1">Scholars Enrolled
-                        </p>
-                    </div>
-                    <div>
-                        <p class="text-3xl font-black text-white">—</p>
-                        <p class="text-xs text-blue-200/80 uppercase tracking-wider font-bold mt-1">Active Programs</p>
-                    </div>
-                    <div>
-                        <p class="text-3xl font-black text-white">—</p>
-                        <p class="text-xs text-blue-200/80 uppercase tracking-wider font-bold mt-1">Total Grant Fund</p>
-                    </div>
                 </div>
             </div>
 
-            <!-- Right Dynamic Card Display Placeholder -->
-            <div class="lg:col-span-5 bg-white/10 backdrop-blur-md rounded-3xl border border-white/10 p-8 shadow-2xl">
-                <div class="flex justify-between items-center mb-6">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 rounded-xl bg-blue-500/30 flex items-center justify-center text-white">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                                stroke="currentColor" class="w-5 h-5">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M9.813 15.904 9 21l8.904-4.412L18 21l.813-5.096m-8.904-.79c-.198-.06-.395-.133-.591-.219A9.003 9.003 0 0 1 3 12c0-3.655 2.18-6.8 5.318-8.19a9.003 9.003 0 0 1 11.364 0A9.03 9.03 0 0 1 21 12a9 9 0 0 1-7.813 8.904m-1.375-1.375c-.198.06-.395.133-.591.219a9.003 9.003 0 0 1-5.318-8.19c0-3.655 2.18-6.8 5.318-8.19a9.003 9.003 0 0 1 11.364 0A9.03 9.03 0 0 1 21 12a9 9 0 0 1-7.813 8.904" />
-                            </svg>
-                        </div>
-                        <div>
-                            <p class="font-bold text-white text-sm">Evaluation System</p>
-                            <p class="text-[10px] text-blue-200/80 font-bold uppercase tracking-wider">Criteria Overview
-                            </p>
-                        </div>
-                    </div>
-                    <span
-                        class="bg-blue-500/30 text-blue-100 border border-white/10 text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full">Status</span>
+            <!-- Dynamic Metrics Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl pt-6">
+                <div class="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/10">
+                    <p class="text-3xl font-black text-white">{{ $stats['active_scholars'] ?? '0' }}</p>
+                    <p class="text-xs text-blue-200 uppercase tracking-wider font-semibold mt-1">Active Scholars</p>
                 </div>
-
-                <!-- Program Details Overview -->
-                <div class="grid grid-cols-3 gap-4 mb-6">
-                    <div class="bg-slate-950/20 p-4 rounded-2xl text-center">
-                        <p class="text-[10px] text-blue-200 uppercase tracking-wider font-bold">Grade Average</p>
-                        <p class="text-lg font-bold mt-1 text-white">—</p>
-                    </div>
-                    <div class="bg-slate-950/20 p-4 rounded-2xl text-center">
-                        <p class="text-[10px] text-blue-200 uppercase tracking-wider font-bold">Grade point</p>
-                        <p class="text-lg font-bold mt-1 text-white">—</p>
-                    </div>
-                    <div class="bg-slate-950/20 p-4 rounded-2xl text-center">
-                        <p class="text-[10px] text-blue-200 uppercase tracking-wider font-bold">Discount coverage</p>
-                        <p class="text-lg font-bold mt-1 text-white">—</p>
-                    </div>
+                <div class="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/10">
+                    <p class="text-3xl font-black text-white">{{ $stats['scholarship_programs'] ?? '0' }}</p>
+                    <p class="text-xs text-blue-200 uppercase tracking-wider font-semibold mt-1">Scholarship Programs</p>
                 </div>
-
-                <!-- Call to Action Info -->
-                <div class="space-y-3">
-                    <p class="text-xs text-blue-100/70 text-center leading-relaxed">
-                        Create an account to browse personalized grant matches based on your academic profile and
-                        credentials.
-                    </p>
+                <div class="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/10">
+                    <p class="text-3xl font-black text-white">{{ $stats['total_slots'] ?? '0' }}</p>
+                    <p class="text-xs text-blue-200 uppercase tracking-wider font-semibold mt-1">Total Slots</p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/10">
+                    <p class="text-3xl font-black text-white">{{ $stats['applications_this_year'] ?? '0' }}</p>
+                    <p class="text-xs text-blue-200 uppercase tracking-wider font-semibold mt-1">Applications This Year</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 3. About Section -->
+    <!-- About Section -->
     <section id="about" class="py-20 px-6 max-w-7xl mx-auto">
-        <div class="text-center max-w-3xl mx-auto mb-16">
-            <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">About the Scholarship Office</h2>
-            <p class="text-slate-500 mt-3 text-lg">
-                We design and administer programs tailored to support deserving students in achieving academic success.
-            </p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <!-- Our Mission Card -->
-            <div class="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm text-center">
-                <div
-                    class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-6">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                        stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M12 18a3.75 3.75 0 0 0 .495-7.467 5.99 5.99 0 0 0-1.925 3.546 5.974 5.974 0 0 1-2.133-1A3.75 3.75 0 0 0 12 18Z" />
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M9.75 9.75c0 .414-.168.789-.439 1.061A3.728 3.728 0 0 0 9 12.75a3.75 3.75 0 0 0 7.5 0c0-1.03-.419-1.964-1.098-2.639A3.728 3.728 0 0 0 14.25 9.75V9a1.5 1.5 0 0 0-3 0v.75Z" />
-                    </svg>
-                </div>
-                <h3 class="text-xl font-bold text-slate-900 mb-3">Our Mission</h3>
-                <p class="text-slate-500 text-sm leading-relaxed">
-                    To provide equal educational opportunities by offering scholarship programs to academically
-                    deserving and financially challenged students.
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <!-- Left Narrative -->
+            <div class="lg:col-span-7 space-y-6">
+                <span class="text-xs font-extrabold uppercase tracking-widest text-blue-600 block">About CKC ScholarHub</span>
+                <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">
+                    A Smarter Way to Manage <br><span class="text-blue-600">Student Scholarships</span>
+                </h2>
+                <p class="text-slate-500 text-sm leading-relaxed max-w-2xl">
+                    CKC ScholarHub is the official scholarship management platform of Christ the King College. It provides a centralized, transparent, and efficient way for students, registrars, and the scholarship office to collaborate on the scholarship process.
                 </p>
+                <p class="text-slate-500 text-xs leading-relaxed max-w-2xl">
+                    From browsing available programs to uploading documents, tracking application status, and generating reports — ScholarHub handles every step with clarity and ease.
+                </p>
+
+                <!-- Feature Badges -->
+                <div class="flex flex-wrap gap-3 pt-2">
+                    <span class="inline-flex items-center space-x-1.5 bg-blue-50 text-blue-700 text-xs font-bold px-3 py-2 rounded-xl">
+                        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                        <span>Transparent Process</span>
+                    </span>
+                    <span class="inline-flex items-center space-x-1.5 bg-blue-50 text-blue-700 text-xs font-bold px-3 py-2 rounded-xl">
+                        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                        <span>Document Management</span>
+                    </span>
+                    <span class="inline-flex items-center space-x-1.5 bg-blue-50 text-blue-700 text-xs font-bold px-3 py-2 rounded-xl">
+                        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                        <span>Real-time Tracking</span>
+                    </span>
+                    <span class="inline-flex items-center space-x-1.5 bg-blue-50 text-blue-700 text-xs font-bold px-3 py-2 rounded-xl">
+                        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                        <span>Role-based Access</span>
+                    </span>
+                </div>
             </div>
 
-            <!-- Our Vision Card -->
-            <div class="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm text-center">
-                <div
-                    class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-6">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                        stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                    </svg>
+            <!-- Right Image Showcase with Floating Badge -->
+            <div class="lg:col-span-5 relative">
+                <div class="rounded-3xl overflow-hidden border border-slate-200/80 shadow-xl bg-slate-100">
+                    <img src="{{ asset('img/about-students.jpg') }}" alt="Students Studying" class="w-full h-80 object-cover">
                 </div>
-                <h3 class="text-xl font-bold text-slate-900 mb-3">Our Vision</h3>
-                <p class="text-slate-500 text-sm leading-relaxed">
-                    To evolve as a transformative scholarship office that nurtures student potential and promotes
-                    academic excellence.
-                </p>
-            </div>
-
-            <!-- Core Values Card -->
-            <div class="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm text-center">
-                <div
-                    class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-6">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                        stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M11.48 3.499c.113-.242.457-.242.57 0l2.009 4.107 4.532.658c.268.039.375.368.181.557l-3.28 3.197.775 4.512c.045.263-.231.464-.471.34l-4.053-2.13-4.053 2.13c-.24.124-.516-.077-.471-.34l.775-4.512-3.28-3.197c-.194-.189-.087-.518.181-.557l4.532-.658 2.008-4.107Z" />
-                    </svg>
+                <div class="absolute -bottom-5 -left-5 bg-white p-4 rounded-2xl shadow-lg border border-slate-100 flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <div>
+                        <p class="text-xs font-black text-slate-900">{{ $stats['satisfaction_rate'] ?? '0%' }} Satisfaction</p>
+                        <p class="text-[10px] text-slate-400 font-medium">From active scholars</p>
+                    </div>
                 </div>
-                <h3 class="text-xl font-bold text-slate-900 mb-3">Core Values</h3>
-                <p class="text-slate-500 text-sm leading-relaxed">
-                    Faith, Excellence, and Service guide every decision made by the CKC Scholarship Office.
-                </p>
             </div>
         </div>
     </section>
 
-    <!-- 4. Scholarship Programs Section -->
-    <section id="scholarships" class="py-20 bg-white border-t border-b border-slate-100 px-6">
+    <!-- Scholarship Programs Section -->
+    <section id="scholarships" class="py-20 bg-slate-50 border-t border-b border-slate-200/60 px-6">
         <div class="max-w-7xl mx-auto">
-            <div class="flex justify-between items-end mb-12">
-                <div>
-                    <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Scholarship Programs</h2>
-                    <p class="text-slate-500 mt-2">Explore outstanding opportunities for CKC students.</p>
-                </div>
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-xs font-extrabold uppercase tracking-widest text-amber-500 block mb-1">Available Programs</span>
+                <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Scholarship Programs</h2>
+                <p class="text-slate-500 text-xs mt-2">Explore our scholarship opportunities designed to support and recognize outstanding students.</p>
             </div>
 
-            <!-- Real, database-backed Scholarship Card Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-
+            <!-- Scholarship Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 @forelse($scholarships as $scholarship)
-                    <div
-                        class="bg-slate-50 rounded-2xl border border-slate-100 p-6 flex flex-col justify-between hover:shadow-lg transition">
+                    <div class="bg-white rounded-2xl border border-slate-200/80 p-6 flex flex-col justify-between hover:shadow-lg transition">
                         <div>
-                            <div class="flex justify-between items-start mb-6">
-                                <span
-                                    class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                                        stroke="currentColor" class="w-5 h-5">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.57 50.57 0 0 0-2.658-.813A5.905 5.905 0 0 1 12 3.493a5.903 5.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M12 13.489v6.525M21 12v5.25" />
-                                    </svg>
-                                </span>
-                                <span
-                                    class="bg-blue-100 text-blue-800 text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full">{{ $scholarship->status }}</span>
+                            <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
                             </div>
-                            <h3 class="text-lg font-bold text-slate-900 mb-2">{{ $scholarship->title }}</h3>
-                            <p class="text-slate-500 text-xs leading-relaxed mb-6">
-                                {{ \Illuminate\Support\Str::limit($scholarship->description ?? 'No description provided.', 140) }}
-                            </p>
+                            <h3 class="text-sm font-bold text-slate-900 mb-1">{{ $scholarship->title }}</h3>
+                            <p class="text-blue-600 font-extrabold text-base mb-4">{{ $scholarship->benefits ?? '—' }}</p>
                         </div>
-                        <div>
-                            <div class="grid grid-cols-2 gap-4 border-t border-slate-200/60 pt-4 mb-6">
-                                <div>
-                                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Coverage</p>
-                                    <p class="text-sm font-extrabold text-slate-900">{{ $scholarship->benefits ?? '—' }}</p>
-                                </div>
-                                <div>
-                                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Open Slots</p>
-                                    <p class="text-sm font-extrabold text-slate-900">{{ $scholarship->slots_left }} /
-                                        {{ $scholarship->slots_total }}
-                                    </p>
-                                </div>
+                        
+                        <div class="space-y-4 pt-4 border-t border-slate-100 text-xs">
+                            <div class="flex justify-between text-slate-500">
+                                <span>Slots:</span>
+                                <span class="font-bold text-slate-800">{{ $scholarship->slots_left ?? '0' }}</span>
+                            </div>
+                            <div class="flex justify-between text-slate-500">
+                                <span>Deadline:</span>
+                                <span class="font-bold text-slate-800">{{ $scholarship->deadline ? \Carbon\Carbon::parse($scholarship->deadline)->format('M d, Y') : '—' }}</span>
                             </div>
                             <a href="{{ route('register') }}"
-                                class="w-full block text-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-sm transition">
+                                class="w-full block text-center bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold py-2 rounded-xl transition text-xs">
                                 Apply Now &rarr;
                             </a>
                         </div>
                     </div>
                 @empty
-                    <div class="col-span-full text-center py-16 border border-dashed border-slate-200 rounded-2xl">
-                        <p class="text-sm font-bold text-slate-900">No open scholarship programs right now</p>
-                        <p class="text-xs text-slate-400 mt-1">Please check back soon — new programs are added regularly.
-                        </p>
+                    <div class="col-span-full text-center py-16 bg-white border border-dashed border-slate-200 rounded-2xl">
+                        <p class="text-sm font-bold text-slate-900">No active scholarship programs found</p>
+                        <p class="text-xs text-slate-400 mt-1">Please check back soon for new program announcements.</p>
                     </div>
                 @endforelse
-
             </div>
         </div>
     </section>
 
-    <!-- 5. How to Apply Section -->
-    <section id="how-to-apply" class="py-20 bg-gradient-to-r from-blue-700 to-blue-800 text-white px-6">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <h2 class="text-3xl font-extrabold tracking-tight">How to Apply</h2>
-                <p class="text-blue-100/80 mt-3 text-lg">Follow these simple steps to apply for scholarships.</p>
-            </div>
-
-            <!-- Dynamic Horizontal Grid Timeline Steps -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
-                <!-- Step 1 -->
-                <div class="relative text-center md:text-left">
-                    <div
-                        class="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center text-white font-bold text-lg mb-6 mx-auto md:mx-0">
-                        1
-                    </div>
-                    <h3 class="text-lg font-bold mb-2">Register</h3>
-                    <p class="text-blue-100/70 text-xs leading-relaxed">
-                        Sign up on the ScholarHub portal using your official student credentials.
-                    </p>
-                </div>
-
-                <!-- Step 2 -->
-                <div class="relative text-center md:text-left">
-                    <div
-                        class="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center text-white font-bold text-lg mb-6 mx-auto md:mx-0">
-                        2
-                    </div>
-                    <h3 class="text-lg font-bold mb-2">Browse</h3>
-                    <p class="text-blue-100/70 text-xs leading-relaxed">
-                        Explore available scholarship programs and review all requirements.
-                    </p>
-                </div>
-
-                <!-- Step 3 -->
-                <div class="relative text-center md:text-left">
-                    <div
-                        class="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center text-white font-bold text-lg mb-6 mx-auto md:mx-0">
-                        3
-                    </div>
-                    <h3 class="text-lg font-bold mb-2">Apply</h3>
-                    <p class="text-blue-100/70 text-xs leading-relaxed">
-                        Fill out the application forms and upload digital copies of requested documents.
-                    </p>
-                </div>
-
-                <!-- Step 4 -->
-                <div class="relative text-center md:text-left">
-                    <div
-                        class="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center text-white font-bold text-lg mb-6 mx-auto md:mx-0">
-                        4
-                    </div>
-                    <h3 class="text-lg font-bold mb-2">Track</h3>
-                    <p class="text-blue-100/70 text-xs leading-relaxed">
-                        Monitor application updates in real-time straight from your student account.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 6. Announcements Section -->
-    <section class="py-20 px-6 max-w-7xl mx-auto">
+    <!-- Application Process Section -->
+    <section id="apply" class="py-20 px-6 max-w-7xl mx-auto">
         <div class="text-center max-w-3xl mx-auto mb-16">
-            <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Latest Announcements</h2>
-            <p class="text-slate-500 mt-3">Stay updated with critical circulars from the office.</p>
+            <span class="text-xs font-extrabold uppercase tracking-widest text-blue-600 block mb-1">How It Works</span>
+            <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Application Process</h2>
         </div>
 
-        <!-- Dynamic Announcement Placeholder -->
-        <div
-            class="max-w-2xl mx-auto text-center py-12 px-6 bg-white rounded-2xl border border-slate-100 text-slate-400">
-            <div class="flex justify-center mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="w-8 h-8 text-slate-300">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
-                </svg>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div class="space-y-3">
+                <div class="w-10 h-10 rounded-xl bg-blue-900 text-white font-black text-sm flex items-center justify-center">01</div>
+                <h3 class="text-sm font-bold text-slate-900">Register & Complete Profile</h3>
+                <p class="text-slate-500 text-xs leading-relaxed">Create your student account and fill in your academic information.</p>
             </div>
-            <p class="text-sm">No new announcements at this time. Check back later for system updates.</p>
-        </div>
-    </section>
-
-    <!-- 7. Dynamic Contact & Map Section -->
-    <section id="contact" class="py-20 bg-slate-100/50 border-t border-slate-200/40 px-6">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-stretch">
-
-                <!-- Contact Info Panel (Left) -->
-                <div class="lg:col-span-5 flex flex-col justify-between">
-                    <div>
-                        <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Contact Information</h2>
-                        <p class="text-slate-500 mt-2 text-sm leading-relaxed mb-10">
-                            Have query guidelines, eligibility concerns, or application process issues? Get in touch
-                            with us directly.
-                        </p>
-
-                        <!-- Address Info Triggering Clickable Maps Link -->
-                        <div class="space-y-6">
-                            <a href="https://goo.gl/maps/p6fjtB7J15LvpAYT6" target="_blank"
-                                class="flex items-start space-x-4 group p-3 -m-3 hover:bg-slate-200/50 rounded-xl transition">
-                                <span
-                                    class="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" class="w-5 h-5">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-                                    </svg>
-                                </span>
-                                <div>
-                                    <h4 class="font-bold text-slate-900 text-sm group-hover:text-blue-600 transition">
-                                        Office Address</h4>
-                                    <p class="text-slate-500 text-xs leading-relaxed mt-1">National Highway, 9014
-                                        Gingoog City</p>
-                                    <span class="text-[10px] text-blue-600 font-bold hover:underline block mt-1">Open in
-                                        Google Maps &rarr;</span>
-                                </div>
-                            </a>
-
-                            <!-- Telephone Number -->
-                            <div class="flex items-start space-x-4">
-                                <span
-                                    class="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" class="w-5 h-5">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-2.824-1.802-5.194-4.174-7-7l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
-                                    </svg>
-                                </span>
-                                <div>
-                                    <h4 class="font-bold text-slate-900 text-sm">Phone Number</h4>
-                                    <p class="text-slate-500 text-xs leading-relaxed mt-1">088 861 0149</p>
-                                </div>
-                            </div>
-
-                            <!-- Academic Email Address -->
-                            <div class="flex items-start space-x-4">
-                                <span
-                                    class="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" class="w-5 h-5">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0l-7.5-4.615a2.25 2.25 0 0 1-1.07-1.916V6.75" />
-                                    </svg>
-                                </span>
-                                <div>
-                                    <h4 class="font-bold text-slate-900 text-sm">Email Support</h4>
-                                    <p class="text-slate-500 text-xs leading-relaxed mt-1">
-                                        scholarships@ckcgingoog.edu.ph</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="pt-8 mt-8 border-t border-slate-200/60 text-xs text-slate-400 font-semibold">
-                        <span>Office Hours: Monday - Friday, 8:00 AM - 5:00 PM</span>
-                    </div>
-                </div>
-
-                <!-- Live Mailer Contact Form (Right) -->
-                <div class="lg:col-span-7 bg-white p-8 rounded-3xl border border-slate-100 shadow-sm">
-                    <h3 class="text-lg font-bold text-slate-900 mb-6">Send a Message</h3>
-
-                    <form action="#" class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">Full
-                                Name</label>
-                            <input type="text" placeholder="John Doe"
-                                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-600 transition"
-                                required>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">Email
-                                Address</label>
-                            <input type="email" placeholder="student@ckcgingoog.edu.ph"
-                                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-600 transition"
-                                required>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">Your
-                                Message</label>
-                            <textarea rows="4" placeholder="How can our scholarship team assist you today?"
-                                class="w-full bg-slate-50 border border-slate-200 rounded-xl p-4 text-sm focus:outline-none focus:border-blue-600 transition"
-                                required></textarea>
-                        </div>
-
-                        <button type="submit"
-                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl text-sm transition shadow-md shadow-blue-500/10">
-                            Send Message
-                        </button>
-                    </form>
-                </div>
-
+            <div class="space-y-3">
+                <div class="w-10 h-10 rounded-xl bg-blue-900 text-white font-black text-sm flex items-center justify-center">02</div>
+                <h3 class="text-sm font-bold text-slate-900">Browse Scholarships</h3>
+                <p class="text-slate-500 text-xs leading-relaxed">Explore available scholarship programs and check eligibility requirements.</p>
+            </div>
+            <div class="space-y-3">
+                <div class="w-10 h-10 rounded-xl bg-blue-900 text-white font-black text-sm flex items-center justify-center">03</div>
+                <h3 class="text-sm font-bold text-slate-900">Submit Application</h3>
+                <p class="text-slate-500 text-xs leading-relaxed">Upload required documents and submit your scholarship application.</p>
+            </div>
+            <div class="space-y-3">
+                <div class="w-10 h-10 rounded-xl bg-blue-900 text-white font-black text-sm flex items-center justify-center">04</div>
+                <h3 class="text-sm font-bold text-slate-900">Track Your Status</h3>
+                <p class="text-slate-500 text-xs leading-relaxed">Monitor your application status and receive real-time notifications.</p>
             </div>
         </div>
     </section>
 
-    <!-- 8. Footer Section -->
-    <footer class="bg-slate-950 text-slate-400 py-12 px-6 border-t border-slate-900">
-        <div
-            class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0 text-xs">
-            <!-- Brand Info Left -->
-            <div class="flex items-center space-x-3">
-                <div class="w-12 h-12 flex items-center justify-center overflow-hidden shrink-0">
-                    <img src="{{ asset('img/logo.png') }}" alt="Christ the King College Logo"
-                        class="w-full h-full object-contain p-0.5">
-                </div>
+    <!-- Required Documents & Callout Section -->
+    <section class="py-20 bg-slate-50 border-t border-slate-200/60 px-6">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            <!-- Left Document List -->
+            <div class="lg:col-span-7 space-y-6">
                 <div>
-                    <span class="text-white font-bold text-sm tracking-tight block">CKC ScholarHub</span>
-                    <span class="text-[10px] text-slate-500">Christ the King College</span>
+                    <span class="text-xs font-extrabold uppercase tracking-widest text-blue-600 block mb-1">Requirements</span>
+                    <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Required Documents</h2>
+                </div>
+
+                <div class="space-y-3">
+                    @forelse($required_documents ?? [] as $doc)
+                        <div class="bg-white p-4 rounded-xl border border-slate-200/80 flex items-center space-x-3">
+                            <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold text-slate-900">{{ $doc->name }}</p>
+                                <p class="text-[10px] text-slate-400">{{ $doc->description }}</p>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="p-6 bg-white border border-dashed border-slate-200 rounded-xl text-center">
+                            <p class="text-xs font-bold text-slate-700">No document requirements loaded</p>
+                        </div>
+                    @endforelse
                 </div>
             </div>
 
-            <!-- Copyright and Address Right -->
-            <div class="text-center md:text-right space-y-1">
-                <p class="text-slate-200 font-medium">© 2026 Christ the King College. All Rights Reserved.</p>
-                <p class="text-slate-500">National Highway, 9014 Gingoog City &middot; <a
-                        href="mailto:scholarships@ckcgingoog.edu.ph"
-                        class="hover:underline hover:text-blue-400 transition">scholarships@ckcgingoog.edu.ph</a></p>
+            <!-- Right Callout Card -->
+            <div class="lg:col-span-5 bg-blue-700 text-white p-8 rounded-3xl space-y-6 shadow-xl">
+                <h3 class="text-xl font-extrabold">Ready to Apply?</h3>
+                <p class="text-blue-100 text-xs leading-relaxed">
+                    Create your student account to start your scholarship journey at Christ the King College.
+                </p>
+
+                <ul class="space-y-3 text-xs text-blue-100">
+                    <li class="flex items-center space-x-2">
+                        <svg class="w-4 h-4 text-amber-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                        <span>Free to apply — no application fee</span>
+                    </li>
+                    <li class="flex items-center space-x-2">
+                        <svg class="w-4 h-4 text-amber-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                        <span>Track your status in real-time</span>
+                    </li>
+                    <li class="flex items-center space-x-2">
+                        <svg class="w-4 h-4 text-amber-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                        <span>Get notified at every step</span>
+                    </li>
+                    <li class="flex items-center space-x-2">
+                        <svg class="w-4 h-4 text-amber-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                        <span>Secure document uploads</span>
+                    </li>
+                </ul>
+
+                <a href="{{ route('register') }}"
+                    class="block w-full text-center bg-amber-400 hover:bg-amber-500 text-slate-900 font-extrabold py-3 rounded-xl transition text-xs">
+                    Get Started &rarr;
+                </a>
+
+                <div class="grid grid-cols-2 gap-3 pt-2">
+                    <a href="{{ route('login') }}" class="block text-center bg-white/10 hover:bg-white/20 text-white font-semibold py-2 rounded-xl text-xs transition">Registrar Portal</a>
+                    <a href="{{ route('login', ['role' => 'office']) }}" class="block text-center bg-white/10 hover:bg-white/20 text-white font-semibold py-2 rounded-xl text-xs transition">Admin Portal</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 px-6 max-w-7xl mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-12">
+            <span class="text-xs font-extrabold uppercase tracking-widest text-blue-600 block mb-1">Contact</span>
+            <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Scholarship Office</h2>
+            <p class="text-slate-500 text-xs mt-2">For inquiries about scholarships, contact the CKC Scholarship Office.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200/80 text-center space-y-2">
+                <div class="w-8 h-8 rounded-lg bg-red-50 text-red-500 flex items-center justify-center mx-auto">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                </div>
+                <p class="text-xs font-bold text-slate-900">Address</p>
+                <p class="text-[11px] text-slate-500 leading-relaxed">{{ $contact['address'] ?? 'Christ the King College, Gingoog City' }}</p>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl border border-slate-200/80 text-center space-y-2">
+                <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center mx-auto">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                </div>
+                <p class="text-xs font-bold text-slate-900">Phone</p>
+                <p class="text-[11px] text-slate-500">{{ $contact['phone'] ?? '—' }}</p>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl border border-slate-200/80 text-center space-y-2">
+                <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center mx-auto">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                </div>
+                <p class="text-xs font-bold text-slate-900">Email</p>
+                <p class="text-[11px] text-slate-500">{{ $contact['email'] ?? '—' }}</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="bg-slate-950 text-slate-400 py-8 px-6 border-t border-slate-900 text-xs">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <div class="flex items-center space-x-3">
+                <div class="w-6 h-6 flex items-center justify-center">
+                    <img src="{{ asset('img/logo.png') }}" alt="CKC Logo" class="w-full h-full object-contain">
+                </div>
+                <span class="text-white font-bold">CKC ScholarHub</span>
+            </div>
+
+            <p class="text-[11px] text-slate-500">&copy; {{ date('Y') }} Christ the King College. All rights reserved.</p>
+
+            <div class="flex space-x-6 text-[11px]">
+                <a href="#" class="hover:text-white transition">Privacy Policy</a>
+                <a href="#" class="hover:text-white transition">Terms</a>
+                <a href="#" class="hover:text-white transition">Help</a>
             </div>
         </div>
     </footer>
-
 </body>
 
 </html>
