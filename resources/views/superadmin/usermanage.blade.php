@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{{ asset('css/tailwind.css') }}"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -35,7 +35,7 @@
 </head>
 
 <body class="font-sans antialiased h-full text-slate-800"
-    x-data="{ sidebarCollapsed: false, mobileSidebarOpen: false, showAdminModal: {{ (request('create') || $errors->any()) ? 'true' : 'false' }}, showPassword: false }">
+    x-data="{ sidebarCollapsed: false, mobileSidebarOpen: false, showPassword: false, selectedUserId: null, passwordModalId: null }">
 
     <!-- Mobile Navigation Drawer Overlay -->
     <div x-show="mobileSidebarOpen" class="fixed inset-0 z-50 flex md:hidden" role="dialog" aria-modal="true" style="display: none;">
@@ -143,8 +143,8 @@
 
                     <div class="flex items-center gap-3">
                         <div class="text-right hidden sm:block">
-                            <h4 class="text-xs font-bold text-slate-800 leading-tight">Super Admin</h4>
-                            <span class="text-[10px] text-slate-400 font-medium block">System Administrator</span>
+                            <h4 class="text-xs font-bold text-slate-800 leading-tight">School Registrar</h4>
+                            <span class="text-[10px] text-slate-400 font-medium block">Registrar Office</span>
                         </div>
                         <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 font-bold flex items-center justify-center text-sm border border-blue-200 shrink-0">
                             SA
@@ -173,21 +173,12 @@
                         <p class="text-xs text-slate-400 font-bold mt-1">{{ $totalUsers ?? ($users->count() ?? 0) }} scholarship admin{{ (($totalUsers ?? ($users->count() ?? 0)) === 1) ? '' : 's' }} registered</p>
                     </div>
 
-                    <!-- Actions Buttons -->
                     <div class="flex items-center space-x-3">
                         <button class="inline-flex items-center space-x-2 bg-white border border-slate-200 px-5 py-2.5 rounded-xl font-bold text-sm text-blue-600 hover:bg-slate-50 transition">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
                             </svg>
                             <span>Filter</span>
-                        </button>
-
-                        <!-- SCHOLARSHIP ADMIN MODAL TRIGGER BUTTON -->
-                        <button @click="showAdminModal = true" class="inline-flex items-center space-x-2 bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-blue-700 shadow-md shadow-blue-500/10 transition">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                            </svg>
-                            <span>Create Scholarship Admin</span>
                         </button>
                     </div>
                 </div>
@@ -235,15 +226,20 @@
                                         </td>
                                         <td class="py-4 px-6 text-slate-500 font-semibold">{{ $admin->created_at?->format('M d, Y') ?? '—' }}</td>
                                         <td class="py-4 px-6 text-right space-x-4">
-                                            <button class="text-slate-500 hover:text-blue-600 transition font-bold text-xs">Edit</button>
-                                            <button class="text-slate-500 hover:text-blue-600 transition font-bold text-xs">Reset</button>
+                                            <button type="button" @click="selectedUserId = {{ $admin->id }}" class="text-slate-500 hover:text-blue-600 transition font-bold text-xs">View Account</button>
+                                            <button type="button" @click="passwordModalId = {{ $admin->id }}" class="text-slate-500 hover:text-blue-600 transition font-bold text-xs">Change Password</button>
+                                            <form action="{{ route('superadmin.users.destroy', $admin->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Delete account for {{ addslashes($admin->name) }}?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-rose-500 hover:text-rose-600 transition font-bold text-xs">Delete Account</button>
+                                            </form>
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
                                         <td colspan="6" class="py-14 px-6 text-center">
                                             <p class="text-sm font-bold text-slate-900">No scholarship admins yet</p>
-                                            <p class="text-xs text-slate-400 font-semibold mt-1">Click "Create Scholarship Admin" to add the first account.</p>
+                                            <p class="text-xs text-slate-400 font-semibold mt-1">No registrar-managed accounts have been created.</p>
                                         </td>
                                     </tr>
                                 @endforelse
@@ -255,98 +251,74 @@
         </div>
     </div>
 
-    <!-- POPUP MODAL COMPONENT FOR REGISTERING SCHOLARSHIP ADMIN -->
-    <div x-show="showAdminModal" x-cloak
-         class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 backdrop-blur-sm p-4"
-         x-transition:enter="transition ease-out duration-200"
-         x-transition:enter-start="opacity-0"
-         x-transition:enter-end="opacity-100">
-        <div @click.outside="showAdminModal = false"
-             class="bg-white w-full max-w-md rounded-2xl border border-slate-200 shadow-xl overflow-hidden max-h-[90vh] overflow-y-auto">
-            <!-- Modal Header -->
-            <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                <div>
-                    <h3 class="text-lg font-bold text-slate-900">Create Scholarship Admin</h3>
-                    <p class="text-xs text-slate-400 font-semibold mt-0.5">Add a new scholarship administrator account</p>
+    @foreach ($users ?? [] as $admin)
+        <div x-show="selectedUserId === {{ $admin->id }}" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 backdrop-blur-sm p-4">
+            <div @click.outside="selectedUserId = null" class="bg-white w-full max-w-md rounded-2xl border border-slate-200 shadow-xl overflow-hidden">
+                <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900">Account Details</h3>
+                        <p class="text-xs text-slate-400 font-semibold mt-0.5">Scholarship admin profile</p>
+                    </div>
+                    <button @click="selectedUserId = null" class="text-slate-400 hover:text-slate-600 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                        </svg>
+                    </button>
                 </div>
-                <button @click="showAdminModal = false" class="text-slate-400 hover:text-slate-600 transition">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                    </svg>
-                </button>
+                <div class="p-6 space-y-4">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-full bg-blue-100 text-blue-600 font-bold flex items-center justify-center text-sm border border-blue-200">{{ strtoupper(substr($admin->first_name ?? $admin->name, 0, 1) . substr($admin->last_name ?? '', 0, 1)) }}</div>
+                        <div>
+                            <p class="font-bold text-slate-900 text-base">{{ $admin->name }}</p>
+                            <p class="text-xs text-slate-500">{{ $admin->email }}</p>
+                        </div>
+                    </div>
+                    <div class="rounded-xl border border-slate-200 bg-slate-50 p-4 space-y-2 text-sm">
+                        <div class="flex justify-between"><span class="text-slate-500">Role</span><span class="font-semibold text-slate-800">{{ $admin->role }}</span></div>
+                        <div class="flex justify-between"><span class="text-slate-500">Scholarship</span><span class="font-semibold text-slate-800">{{ $admin->scholarship_name ?? '—' }}</span></div>
+                        <div class="flex justify-between"><span class="text-slate-500">Status</span><span class="font-semibold text-slate-800">{{ $admin->status ?? 'Active' }}</span></div>
+                        <div class="flex justify-between"><span class="text-slate-500">Created</span><span class="font-semibold text-slate-800">{{ $admin->created_at?->format('M d, Y') ?? '—' }}</span></div>
+                    </div>
+                    <div class="flex items-center space-x-3 pt-4 border-t border-slate-100">
+                        <button type="button" @click="selectedUserId = null" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-3 rounded-xl text-sm transition">Close</button>
+                        <button type="button" @click="selectedUserId = null; passwordModalId = {{ $admin->id }}" class="w-1/2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-sm transition">Change Password</button>
+                    </div>
+                </div>
             </div>
-
-            <!-- Modal Body Form -->
-            <form action="{{ route('superadmin.users.store') }}" method="POST" class="p-6 space-y-4">
-                @csrf
-                <!-- Fixed Hidden Role input assigned automatically -->
-                <input type="hidden" name="role" value="Scholarship Admin">
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">First Name</label>
-                        <input type="text" name="first_name" value="{{ old('first_name') }}" placeholder="Jane" class="w-full bg-slate-50 border @error('first_name') border-red-400 @else border-slate-200 @enderror rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-600 transition" required>
-                        @error('first_name')
-                            <p class="text-red-500 text-xs font-semibold mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">Last Name</label>
-                        <input type="text" name="last_name" value="{{ old('last_name') }}" placeholder="Doe" class="w-full bg-slate-50 border @error('last_name') border-red-400 @else border-slate-200 @enderror rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-600 transition" required>
-                        @error('last_name')
-                            <p class="text-red-500 text-xs font-semibold mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">Gmail Address</label>
-                    <input type="email" name="email" value="{{ old('email') }}" placeholder="jane.doe@gmail.com" class="w-full bg-slate-50 border @error('email') border-red-400 @else border-slate-200 @enderror rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-600 transition" required>
-                    @error('email')
-                        <p class="text-red-500 text-xs font-semibold mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">Scholarship Name</label>
-                    <input type="text" name="scholarship_name" value="{{ old('scholarship_name') }}" placeholder="e.g., STEM Excellence Grant" class="w-full bg-slate-50 border @error('scholarship_name') border-red-400 @else border-slate-200 @enderror rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-600 transition" required>
-                    @error('scholarship_name')
-                        <p class="text-red-500 text-xs font-semibold mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">Password</label>
-                    <div class="relative">
-                        <input :type="showPassword ? 'text' : 'password'" name="password" placeholder="Minimum 8 characters" class="w-full bg-slate-50 border @error('password') border-red-400 @else border-slate-200 @enderror rounded-xl px-4 py-3 pr-11 text-sm focus:outline-none focus:border-blue-600 transition" required minlength="8">
-                        <button type="button" @click="showPassword = !showPassword" class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 hover:text-slate-600">
-                            <svg x-show="!showPassword" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                            <svg x-show="showPassword" x-cloak class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
-                            </svg>
-                        </button>
-                    </div>
-                    @error('password')
-                        <p class="text-red-500 text-xs font-semibold mt-1">{{ $message }}</p>
-                    @enderror
-                    <p class="text-[11px] text-slate-400 font-semibold mt-1.5">This will be the admin's sign-in password. Share it with them securely.</p>
-                </div>
-
-                <!-- Footer Actions Inside Form -->
-                <div class="flex items-center space-x-3 pt-4 border-t border-slate-100 mt-6">
-                    <button type="button" @click="showAdminModal = false" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-3 rounded-xl text-sm transition">
-                        Cancel
-                    </button>
-                    <button type="submit" class="w-1/2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-sm transition shadow-md shadow-blue-500/10">
-                        Save Account
-                    </button>
-                </div>
-            </form>
         </div>
-    </div>
+
+        <div x-show="passwordModalId === {{ $admin->id }}" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 backdrop-blur-sm p-4">
+            <div @click.outside="passwordModalId = null" class="bg-white w-full max-w-md rounded-2xl border border-slate-200 shadow-xl overflow-hidden">
+                <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900">Change Password</h3>
+                        <p class="text-xs text-slate-400 font-semibold mt-0.5">Update sign-in access</p>
+                    </div>
+                    <button @click="passwordModalId = null" class="text-slate-400 hover:text-slate-600 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <form action="{{ route('superadmin.users.password', $admin->id) }}" method="POST" class="p-6 space-y-4">
+                    @csrf
+                    @method('PUT')
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">New Password</label>
+                        <input type="password" name="password" placeholder="Minimum 8 characters" class="w-full bg-slate-50 border @error('password') border-red-400 @else border-slate-200 @enderror rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-600 transition" required minlength="8">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">Confirm Password</label>
+                        <input type="password" name="password_confirmation" placeholder="Re-enter password" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-600 transition" required>
+                    </div>
+                    <div class="flex items-center space-x-3 pt-4 border-t border-slate-100 mt-2">
+                        <button type="button" @click="passwordModalId = null" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-3 rounded-xl text-sm transition">Cancel</button>
+                        <button type="submit" class="w-1/2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-sm transition">Save Password</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    @endforeach
 
     <script>
         function filterUsers() {

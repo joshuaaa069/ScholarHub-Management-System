@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+
 
 class Scholarship extends Model
 {
@@ -38,5 +40,10 @@ class Scholarship extends Model
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+    public function scholarshipAdmin()
+    {
+        return $this->hasOne(User::class, 'scholarship_id')
+            ->where('role', 'Scholarship Admin');
     }
 }

@@ -16,11 +16,11 @@ class IsSuperAdmin
             return redirect()->route('auth.admin-login');
         }
 
-        // 2. If logged in but not a Super Admin, abort or redirect
-        if (Auth::user()->role !== 'superadmin') {
+        // 2. If logged in but not a School Registrar, abort or redirect
+        if (!in_array(strtolower(Auth::user()->role), ['superadmin', 'school_registrar', 'registrar'])) {
             Auth::logout();
             return redirect()->route('auth.admin-login')->withErrors([
-                'email' => 'Unauthorized access. Super Admins only.'
+                'email' => 'Unauthorized access. School Registrars only.'
             ]);
         }
 

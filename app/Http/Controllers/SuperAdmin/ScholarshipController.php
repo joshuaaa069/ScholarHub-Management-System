@@ -5,6 +5,7 @@ namespace App\Http\Controllers\SuperAdmin;
 use App\Http\Controllers\Controller;
 use App\Models\AuditLog;
 use App\Models\Scholarship;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,7 +27,7 @@ class ScholarshipController extends Controller
             $term = $request->search;
             $query->where(function ($q) use ($term) {
                 $q->where('title', 'like', "%{$term}%")
-                  ->orWhere('provider', 'like', "%{$term}%");
+                    ->orWhere('provider', 'like', "%{$term}%");
             });
         }
 
@@ -49,10 +50,40 @@ class ScholarshipController extends Controller
             'created_by' => Auth::id(),
         ]);
 
+        $adminFullName = trim((string) $request->input('full_name', ''));
+        $adminEmail = trim((string) $request->input('admin_email', ''));
+        $adminPassword = (string) $request->input('admin_password', '');
+        $adminContactNumber = trim((string) $request->input('admin_contact_number', ''));
+
+        if ($adminFullName !== '' && $adminEmail !== '' && $adminPassword !== '' && $adminContactNumber !== '') {
+            $nameParts = preg_split('/\s+/', $adminFullName, 2);
+            $firstName = $nameParts[0] ?? '';
+            $lastName = $nameParts[1] ?? '';
+
+            $admin = User::create([
+                'name' => $adminFullName,
+                'first_name' => $firstName,
+                'last_name' => $lastName,
+                'email' => $adminEmail,
+                'username' => $request->admin_username,
+                'phone' => $adminContactNumber,
+                'role' => 'Scholarship Admin',
+                'scholarship_id' => $scholarship->id,
+                'scholarship_name' => $scholarship->title,
+                'status' => 'Active',
+                'password' => bcrypt($adminPassword),
+            ]);
+
+            AuditLog::record(
+                'Created Scholarship Admin',
+                $adminFullName . ' assigned to "' . $scholarship->title . '"'
+            );
+        }
+
         AuditLog::record('Created Scholarship', $scholarship->title . ' (via Super Admin)');
 
         return redirect()->route('superadmin.scholarships')
-            ->with('success', 'Scholarship "' . $scholarship->title . '" was created.');
+            ->with('success', 'Scholarship created successfully. Scholarship admin account created successfully.');
     }
 
     /**
@@ -124,6 +155,10 @@ class ScholarshipController extends Controller
             'slots_total' => ['required', 'integer', 'min:1'],
             'min_gpa' => ['nullable', 'numeric', 'between:1.00,5.00'],
             'status' => ['required', 'in:Open,Closed'],
+            'full_name' => ['nullable', 'string', 'max:255'],
+            'admin_email' => ['nullable', 'email', 'unique:users,email'],
+            'admin_password' => ['nullable', 'string', 'min:8', 'confirmed'],
+            'admin_contact_number' => ['nullable', 'string', 'max:255'],
         ]);
     }
 }

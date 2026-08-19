@@ -12,7 +12,7 @@ class AuthController extends Controller // <-- MAKE SURE THIS SAYS AuthControlle
     // Show the Super Admin Login Page
     public function showLogin()
     {
-        if (Auth::check() && Auth::user()->role === 'superadmin') {
+        if (Auth::check() && in_array(strtolower(Auth::user()->role), ['superadmin', 'school_registrar', 'registrar'])) {
             return redirect()->route('superadmin.dashboard');
         }
         return view('auth.admin-login');
@@ -27,7 +27,7 @@ class AuthController extends Controller // <-- MAKE SURE THIS SAYS AuthControlle
         ]);
 
         if (Auth::attempt($credentials)) {
-            if (Auth::user()->role === 'superadmin') {
+            if (in_array(strtolower(Auth::user()->role), ['superadmin', 'school_registrar', 'registrar'])) {
                 $request->session()->regenerate();
                 return redirect()->intended(route('superadmin.dashboard'));
             }

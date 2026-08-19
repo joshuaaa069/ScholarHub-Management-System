@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{{ asset('css/tailwind.css') }}"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -30,7 +30,8 @@
         sidebarCollapsed: false,
         mobileSidebarOpen: false,
         showCreateModal: {{ $errors->any() && !old('_editing') ? 'true' : 'false' }},
-        editingModalId: {{ old('_editing') ? old('_editing') : 'null' }}
+        editingModalId: {{ old('_editing') ? old('_editing') : 'null' }},
+        createStep: 1
     }">
 
     <div class="flex min-h-screen">
@@ -49,8 +50,8 @@
                 </div>
                 <div class="flex items-center gap-3 ml-auto">
                     <div class="text-right hidden sm:block">
-                        <h4 class="text-xs font-bold text-slate-800 leading-tight">Super Admin</h4>
-                        <span class="text-[10px] text-slate-400 font-medium block">System Administrator</span>
+                        <h4 class="text-xs font-bold text-slate-800 leading-tight">School Registrar</h4>
+                        <span class="text-[10px] text-slate-400 font-medium block">Registrar Office</span>
                     </div>
                     <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 font-bold flex items-center justify-center text-sm border border-blue-200 shrink-0">SA</div>
                 </div>
@@ -227,70 +228,541 @@
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
                 </button>
             </div>
-            <form action="{{ route('superadmin.scholarships.store') }}" method="POST" class="p-6 space-y-4">
-                @csrf
-                <div>
-                    <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">Scholarship Name</label>
-                    <input type="text" name="title" value="{{ old('title') }}" placeholder="e.g., STEM Excellence Grant" class="w-full bg-slate-50 border @error('title') border-red-400 @else border-slate-200 @enderror rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-600 transition" required>
-                    @error('title')<p class="text-red-500 text-xs font-semibold mt-1">{{ $message }}</p>@enderror
-                </div>
-                <div>
-                    <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">Provider</label>
-                    <input type="text" name="provider" value="{{ old('provider') }}" placeholder="e.g., CKC ScholarHub Office" class="w-full bg-slate-50 border @error('provider') border-red-400 @else border-slate-200 @enderror rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-600 transition" required>
-                    @error('provider')<p class="text-red-500 text-xs font-semibold mt-1">{{ $message }}</p>@enderror
-                </div>
-                <div>
-                    <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">Description</label>
-                    <textarea name="description" rows="3" class="w-full bg-slate-50 border @error('description') border-red-400 @else border-slate-200 @enderror rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-600 transition" required>{{ old('description') }}</textarea>
-                    @error('description')<p class="text-red-500 text-xs font-semibold mt-1">{{ $message }}</p>@enderror
-                </div>
-                <div>
-                    <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">Benefits</label>
-                    <input type="text" name="benefits" value="{{ old('benefits') }}" class="w-full bg-slate-50 border @error('benefits') border-red-400 @else border-slate-200 @enderror rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-600 transition" required>
-                    @error('benefits')<p class="text-red-500 text-xs font-semibold mt-1">{{ $message }}</p>@enderror
-                </div>
-                <div>
-                    <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">Eligibility</label>
-                    <textarea name="eligibility" rows="2" class="w-full bg-slate-50 border @error('eligibility') border-red-400 @else border-slate-200 @enderror rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-600 transition" required>{{ old('eligibility') }}</textarea>
-                    @error('eligibility')<p class="text-red-500 text-xs font-semibold mt-1">{{ $message }}</p>@enderror
-                </div>
-                <div>
-                    <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">Requirements</label>
-                    <textarea name="requirements" rows="2" class="w-full bg-slate-50 border @error('requirements') border-red-400 @else border-slate-200 @enderror rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-600 transition" required>{{ old('requirements') }}</textarea>
-                    @error('requirements')<p class="text-red-500 text-xs font-semibold mt-1">{{ $message }}</p>@enderror
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">Deadline</label>
-                        <input type="date" name="deadline" value="{{ old('deadline') }}" class="w-full bg-slate-50 border @error('deadline') border-red-400 @else border-slate-200 @enderror rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-600 transition" required>
-                        @error('deadline')<p class="text-red-500 text-xs font-semibold mt-1">{{ $message }}</p>@enderror
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">Total Slots</label>
-                        <input type="number" min="1" name="slots_total" value="{{ old('slots_total') }}" placeholder="20" class="w-full bg-slate-50 border @error('slots_total') border-red-400 @else border-slate-200 @enderror rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-600 transition" required>
-                        @error('slots_total')<p class="text-red-500 text-xs font-semibold mt-1">{{ $message }}</p>@enderror
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">Type</label>
-                        <input type="text" name="type" value="{{ old('type', 'General') }}" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-600 transition">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">Status</label>
-                        <select name="status" class="w-full bg-slate-50 border @error('status') border-red-400 @else border-slate-200 @enderror rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-600 transition" required>
-                            <option value="Open" {{ old('status') === 'Open' ? 'selected' : '' }}>Open</option>
-                            <option value="Closed" {{ old('status') === 'Closed' ? 'selected' : '' }}>Closed</option>
-                        </select>
-                        @error('status')<p class="text-red-500 text-xs font-semibold mt-1">{{ $message }}</p>@enderror
-                    </div>
-                </div>
-                <input type="hidden" name="min_gpa" value="0">
-                <div class="flex items-center space-x-3 pt-4 border-t border-slate-100 mt-6">
-                    <button type="button" @click="showCreateModal = false" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-3 rounded-xl text-sm transition">Cancel</button>
-                    <button type="submit" class="w-1/2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-sm transition shadow-md shadow-blue-500/10">Publish</button>
-                </div>
-            </form>
+            <form
+    action="{{ route('superadmin.scholarships.store') }}"
+    method="POST"
+    class="p-6"
+    x-data="{ step: {{ $errors->any() ? 2 : 1 }} }"
+>
+    @csrf
+
+    {{-- STEP INDICATOR --}}
+    <div class="flex items-center gap-3 mb-6">
+        <div
+            class="flex items-center gap-2"
+            :class="step === 1 ? 'text-blue-600' : 'text-slate-400'"
+        >
+            <span
+                class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold border"
+                :class="step === 1
+                    ? 'bg-blue-600 text-white border-blue-600'
+                    : 'bg-white border-slate-300'"
+            >
+                1
+            </span>
+
+            <span class="text-xs font-bold">
+                Scholarship
+            </span>
+        </div>
+
+        <div class="flex-1 h-px bg-slate-200"></div>
+
+        <div
+            class="flex items-center gap-2"
+            :class="step === 2 ? 'text-blue-600' : 'text-slate-400'"
+        >
+            <span
+                class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold border"
+                :class="step === 2
+                    ? 'bg-blue-600 text-white border-blue-600'
+                    : 'bg-white border-slate-300'"
+            >
+                2
+            </span>
+
+            <span class="text-xs font-bold">
+                Scholarship Admin
+            </span>
+        </div>
+    </div>
+
+
+    {{-- ========================================= --}}
+    {{-- STEP 1: SCHOLARSHIP INFORMATION --}}
+    {{-- ========================================= --}}
+
+    <div x-show="step === 1" x-transition>
+
+        {{-- Scholarship Name --}}
+        <div>
+            <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">
+                Scholarship Name
+            </label>
+
+            <input
+                type="text"
+                name="title"
+                value="{{ old('title') }}"
+                placeholder="e.g., CHED Scholarship"
+                class="w-full bg-slate-50 border
+                @error('title') border-red-400 @else border-slate-200 @enderror
+                rounded-xl px-4 py-3 text-sm
+                focus:outline-none focus:border-blue-600 transition"
+                required
+            >
+
+            @error('title')
+                <p class="text-red-500 text-xs font-semibold mt-1">
+                    {{ $message }}
+                </p>
+            @enderror
+        </div>
+
+
+        {{-- Provider --}}
+        <div class="mt-4">
+            <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">
+                Provider
+            </label>
+
+            <input
+                type="text"
+                name="provider"
+                value="{{ old('provider') }}"
+                placeholder="e.g., Commission on Higher Education"
+                class="w-full bg-slate-50 border
+                @error('provider') border-red-400 @else border-slate-200 @enderror
+                rounded-xl px-4 py-3 text-sm
+                focus:outline-none focus:border-blue-600 transition"
+                required
+            >
+
+            @error('provider')
+                <p class="text-red-500 text-xs font-semibold mt-1">
+                    {{ $message }}
+                </p>
+            @enderror
+        </div>
+
+
+        {{-- Description --}}
+        <div class="mt-4">
+            <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">
+                Description
+            </label>
+
+            <textarea
+                name="description"
+                rows="3"
+                class="w-full bg-slate-50 border
+                @error('description') border-red-400 @else border-slate-200 @enderror
+                rounded-xl px-4 py-3 text-sm
+                focus:outline-none focus:border-blue-600 transition"
+                required
+            >{{ old('description') }}</textarea>
+
+            @error('description')
+                <p class="text-red-500 text-xs font-semibold mt-1">
+                    {{ $message }}
+                </p>
+            @enderror
+        </div>
+
+
+        {{-- Benefits --}}
+        <div class="mt-4">
+            <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">
+                Benefits
+            </label>
+
+            <input
+                type="text"
+                name="benefits"
+                value="{{ old('benefits') }}"
+                placeholder="e.g., Full tuition and monthly allowance"
+                class="w-full bg-slate-50 border
+                @error('benefits') border-red-400 @else border-slate-200 @enderror
+                rounded-xl px-4 py-3 text-sm
+                focus:outline-none focus:border-blue-600 transition"
+                required
+            >
+
+            @error('benefits')
+                <p class="text-red-500 text-xs font-semibold mt-1">
+                    {{ $message }}
+                </p>
+            @enderror
+        </div>
+
+
+        {{-- Eligibility --}}
+        <div class="mt-4">
+            <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">
+                Eligibility
+            </label>
+
+            <textarea
+                name="eligibility"
+                rows="3"
+                class="w-full bg-slate-50 border
+                @error('eligibility') border-red-400 @else border-slate-200 @enderror
+                rounded-xl px-4 py-3 text-sm
+                focus:outline-none focus:border-blue-600 transition"
+                required
+            >{{ old('eligibility') }}</textarea>
+
+            @error('eligibility')
+                <p class="text-red-500 text-xs font-semibold mt-1">
+                    {{ $message }}
+                </p>
+            @enderror
+        </div>
+
+
+        {{-- Requirements --}}
+        <div class="mt-4">
+            <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">
+                Requirements
+            </label>
+
+            <textarea
+                name="requirements"
+                rows="3"
+                class="w-full bg-slate-50 border
+                @error('requirements') border-red-400 @else border-slate-200 @enderror
+                rounded-xl px-4 py-3 text-sm
+                focus:outline-none focus:border-blue-600 transition"
+                required
+            >{{ old('requirements') }}</textarea>
+
+            @error('requirements')
+                <p class="text-red-500 text-xs font-semibold mt-1">
+                    {{ $message }}
+                </p>
+            @enderror
+        </div>
+
+
+        {{-- Deadline and Slots --}}
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+
+            <div>
+                <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">
+                    Application Deadline
+                </label>
+
+                <input
+                    type="date"
+                    name="deadline"
+                    value="{{ old('deadline') }}"
+                    class="w-full bg-slate-50 border
+                    @error('deadline') border-red-400 @else border-slate-200 @enderror
+                    rounded-xl px-4 py-3 text-sm
+                    focus:outline-none focus:border-blue-600 transition"
+                    required
+                >
+
+                @error('deadline')
+                    <p class="text-red-500 text-xs font-semibold mt-1">
+                        {{ $message }}
+                    </p>
+                @enderror
+            </div>
+
+
+            <div>
+                <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">
+                    Available Slots
+                </label>
+
+                <input
+                    type="number"
+                    min="1"
+                    name="slots_total"
+                    value="{{ old('slots_total') }}"
+                    placeholder="20"
+                    class="w-full bg-slate-50 border
+                    @error('slots_total') border-red-400 @else border-slate-200 @enderror
+                    rounded-xl px-4 py-3 text-sm
+                    focus:outline-none focus:border-blue-600 transition"
+                    required
+                >
+
+                @error('slots_total')
+                    <p class="text-red-500 text-xs font-semibold mt-1">
+                        {{ $message }}
+                    </p>
+                @enderror
+            </div>
+
+        </div>
+
+
+        {{-- Type and Status --}}
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+
+            <div>
+                <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">
+                    Scholarship Type
+                </label>
+
+                <input
+                    type="text"
+                    name="type"
+                    value="{{ old('type', 'General') }}"
+                    placeholder="e.g., Academic"
+                    class="w-full bg-slate-50 border border-slate-200
+                    rounded-xl px-4 py-3 text-sm
+                    focus:outline-none focus:border-blue-600 transition"
+                >
+            </div>
+
+
+            <div>
+                <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">
+                    Status
+                </label>
+
+                <select
+                    name="status"
+                    class="w-full bg-slate-50 border
+                    @error('status') border-red-400 @else border-slate-200 @enderror
+                    rounded-xl px-4 py-3 text-sm
+                    focus:outline-none focus:border-blue-600 transition"
+                    required
+                >
+                    <option value="Open" {{ old('status', 'Open') === 'Open' ? 'selected' : '' }}>
+                        Open
+                    </option>
+
+                    <option value="Closed" {{ old('status') === 'Closed' ? 'selected' : '' }}>
+                        Closed
+                    </option>
+                </select>
+
+                @error('status')
+                    <p class="text-red-500 text-xs font-semibold mt-1">
+                        {{ $message }}
+                    </p>
+                @enderror
+            </div>
+
+        </div>
+
+
+        {{-- STEP 1 BUTTON --}}
+        <div class="flex gap-3 pt-6">
+
+            <button
+                type="button"
+                @click="showCreateModal = false"
+                class="w-1/2 bg-slate-100 hover:bg-slate-200
+                text-slate-600 font-bold py-3 rounded-xl
+                text-sm transition"
+            >
+                Cancel
+            </button>
+
+            <button
+                type="button"
+                @click="step = 2"
+                class="w-1/2 bg-blue-600 hover:bg-blue-700
+                text-white font-bold py-3 rounded-xl
+                text-sm transition"
+            >
+                Continue
+            </button>
+
+        </div>
+
+    </div>
+
+
+    {{-- ========================================= --}}
+    {{-- STEP 2: SCHOLARSHIP ADMIN --}}
+    {{-- ========================================= --}}
+
+    <div x-show="step === 2" x-transition x-cloak>
+
+        <div class="mb-5">
+            <h4 class="text-base font-bold text-slate-900">
+                Create Scholarship Admin Account
+            </h4>
+
+            <p class="text-xs text-slate-400 mt-1">
+                This administrator will manage this scholarship program.
+            </p>
+        </div>
+
+
+        {{-- Full Name --}}
+        <div>
+            <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">
+                Full Name
+            </label>
+
+            <input
+                type="text"
+                name="full_name"
+                value="{{ old('full_name') }}"
+                placeholder="e.g., Juan Dela Cruz"
+                class="w-full bg-slate-50 border
+                @error('full_name') border-red-400 @else border-slate-200 @enderror
+                rounded-xl px-4 py-3 text-sm
+                focus:outline-none focus:border-blue-600 transition"
+                required
+            >
+
+            @error('full_name')
+                <p class="text-red-500 text-xs font-semibold mt-1">
+                    {{ $message }}
+                </p>
+            @enderror
+        </div>
+
+
+        {{-- Email --}}
+        <div class="mt-4">
+            <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">
+                Email Address
+            </label>
+
+            <input
+                type="email"
+                name="admin_email"
+                value="{{ old('admin_email') }}"
+                placeholder="e.g., ched.admin@ckc.edu.ph"
+                class="w-full bg-slate-50 border
+                @error('admin_email') border-red-400 @else border-slate-200 @enderror
+                rounded-xl px-4 py-3 text-sm
+                focus:outline-none focus:border-blue-600 transition"
+                required
+            >
+
+            @error('admin_email')
+                <p class="text-red-500 text-xs font-semibold mt-1">
+                    {{ $message }}
+                </p>
+            @enderror
+        </div>
+
+
+        {{-- Username --}}
+        <div class="mt-4">
+            <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">
+                Username
+            </label>
+
+            <input
+                type="text"
+                name="admin_username"
+                value="{{ old('admin_username') }}"
+                placeholder="e.g., ched_admin"
+                class="w-full bg-slate-50 border
+                @error('admin_username') border-red-400 @else border-slate-200 @enderror
+                rounded-xl px-4 py-3 text-sm
+                focus:outline-none focus:border-blue-600 transition"
+                required
+            >
+
+            @error('admin_username')
+                <p class="text-red-500 text-xs font-semibold mt-1">
+                    {{ $message }}
+                </p>
+            @enderror
+        </div>
+
+
+        {{-- Password --}}
+        <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+            <div>
+                <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    name="admin_password"
+                    class="w-full bg-slate-50 border
+                    @error('admin_password') border-red-400 @else border-slate-200 @enderror
+                    rounded-xl px-4 py-3 text-sm
+                    focus:outline-none focus:border-blue-600 transition"
+                    required
+                >
+
+                @error('admin_password')
+                    <p class="text-red-500 text-xs font-semibold mt-1">
+                        {{ $message }}
+                    </p>
+                @enderror
+            </div>
+
+
+            {{-- Confirm Password --}}
+            <div>
+                <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">
+                    Confirm Password
+                </label>
+
+                <input
+                    type="password"
+                    name="admin_password_confirmation"
+                    class="w-full bg-slate-50 border
+                    @error('admin_password') border-red-400 @else border-slate-200 @enderror
+                    rounded-xl px-4 py-3 text-sm
+                    focus:outline-none focus:border-blue-600 transition"
+                    required
+                >
+            </div>
+
+        </div>
+
+
+        {{-- Contact Number --}}
+        <div class="mt-4">
+            <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">
+                Contact Number
+            </label>
+
+            <input
+                type="text"
+                name="admin_contact_number"
+                value="{{ old('admin_contact_number') }}"
+                placeholder="e.g., 09123456789"
+                class="w-full bg-slate-50 border
+                @error('admin_contact_number') border-red-400 @else border-slate-200 @enderror
+                rounded-xl px-4 py-3 text-sm
+                focus:outline-none focus:border-blue-600 transition"
+                required
+            >
+
+            @error('admin_contact_number')
+                <p class="text-red-500 text-xs font-semibold mt-1">
+                    {{ $message }}
+                </p>
+            @enderror
+        </div>
+
+
+        {{-- STEP 2 BUTTONS --}}
+        <div class="flex gap-3 pt-6">
+
+            <button
+                type="button"
+                @click="step = 1"
+                class="w-1/2 bg-slate-100 hover:bg-slate-200
+                text-slate-600 font-bold py-3 rounded-xl
+                text-sm transition"
+            >
+                Back
+            </button>
+
+            <button
+                type="submit"
+                class="w-1/2 bg-blue-600 hover:bg-blue-700
+                text-white font-bold py-3 rounded-xl
+                text-sm transition"
+            >
+                Create Scholarship
+            </button>
+
+        </div>
+
+    </div>
+
+</form>
         </div>
     </div>
 </body>

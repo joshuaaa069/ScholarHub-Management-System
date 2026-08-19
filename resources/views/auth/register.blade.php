@@ -12,7 +12,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
 
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{{ asset('css/tailwind.css') }}"></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -98,13 +99,41 @@
                     for (const [key, value] of Object.entries(res.body.errors)) {
                         this.errors[key] = value[0];
                     }
-                    if (this.errors.email || this.errors.password) {
-                        this.step = 3;
-                    } else if (this.errors.student_number || this.errors.course) {
-                        this.step = 2;
-                    } else {
-                        this.step = 1;
-                    }
+                    if (res.status === 422) {
+    this.errors = {};
+
+    for (const [key, value] of Object.entries(res.body.errors)) {
+        this.errors[key] = value[0];
+    }
+
+    // Step 1
+    if (
+        this.errors.first_name ||
+        this.errors.last_name ||
+        this.errors.dob ||
+        this.errors.phone
+    ) {
+        this.step = 1;
+    }
+
+    // Step 2
+    else if (
+        this.errors.student_number ||
+        this.errors.course ||
+        this.errors.year_level
+    ) {
+        this.step = 2;
+    }
+
+    // Step 3
+    else if (
+        this.errors.email ||
+        this.errors.password ||
+        this.errors.password_confirmation
+    ) {
+        this.step = 3;
+    }
+}
                 } else {
                     alert('An unexpected server error occurred.');
                 }

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="{{ asset('img/logo.png') }}">
     <title>{{ config('app.name', 'ScholarHub') }} - Christ the King College</title> <!-- Tailwind CSS Play CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{{ asset('css/tailwind.css') }}"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;500;600;700;800&display=swap"
         rel="stylesheet">
     <style>
@@ -275,7 +275,9 @@
                                 </div>
                                 <div>
                                     <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Open Slots</p>
-                                    <p class="text-sm font-extrabold text-slate-900">{{ $scholarship->slots_left }} / {{ $scholarship->slots_total }}</p>
+                                    <p class="text-sm font-extrabold text-slate-900">{{ $scholarship->slots_left }} /
+                                        {{ $scholarship->slots_total }}
+                                    </p>
                                 </div>
                             </div>
                             <a href="{{ route('register') }}"
@@ -287,7 +289,8 @@
                 @empty
                     <div class="col-span-full text-center py-16 border border-dashed border-slate-200 rounded-2xl">
                         <p class="text-sm font-bold text-slate-900">No open scholarship programs right now</p>
-                        <p class="text-xs text-slate-400 mt-1">Please check back soon — new programs are added regularly.</p>
+                        <p class="text-xs text-slate-400 mt-1">Please check back soon — new programs are added regularly.
+                        </p>
                     </div>
                 @endforelse
 

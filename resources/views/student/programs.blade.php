@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&display=swap"
         rel="stylesheet">
 
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{{ asset('css/tailwind.css') }}"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -166,11 +166,11 @@
                                 class="bg-white rounded-2xl border border-slate-100 p-6 flex flex-col justify-between hover:shadow-lg hover:shadow-slate-100/80 transition-all relative overflow-hidden shadow-sm shadow-slate-100/40">
 
                                 <div class="absolute top-0 left-0 right-0 h-1.5 
-                                                            @if($scholarship->type === 'STEM') bg-blue-500 
-                                                            @elseif($scholarship->type === 'Merit-Based') bg-pink-500 
-                                                            @elseif($scholarship->type === 'Need-Based') bg-emerald-500 
-                                                            @elseif($scholarship->type === 'Government') bg-orange-500 
-                                                            @else bg-purple-500 @endif">
+                                                                            @if($scholarship->type === 'STEM') bg-blue-500 
+                                                                            @elseif($scholarship->type === 'Merit-Based') bg-pink-500 
+                                                                            @elseif($scholarship->type === 'Need-Based') bg-emerald-500 
+                                                                            @elseif($scholarship->type === 'Government') bg-orange-500 
+                                                                            @else bg-purple-500 @endif">
                                 </div>
 
                                 <div class="space-y-4 pt-2">
@@ -184,11 +184,11 @@
                                             @else 💼 @endif
                                         </div>
                                         <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider 
-                                                                    @if($scholarship->type === 'STEM') text-blue-600 bg-blue-50
-                                                                    @elseif($scholarship->type === 'Merit-Based') text-pink-600 bg-pink-50
-                                                                    @elseif($scholarship->type === 'Need-Based') text-emerald-600 bg-emerald-50
-                                                                    @elseif($scholarship->type === 'Government') text-orange-600 bg-orange-50
-                                                                    @else text-purple-600 bg-purple-50 @endif">
+                                                                                    @if($scholarship->type === 'STEM') text-blue-600 bg-blue-50
+                                                                                    @elseif($scholarship->type === 'Merit-Based') text-pink-600 bg-pink-50
+                                                                                    @elseif($scholarship->type === 'Need-Based') text-emerald-600 bg-emerald-50
+                                                                                    @elseif($scholarship->type === 'Government') text-orange-600 bg-orange-50
+                                                                                    @else text-purple-600 bg-purple-50 @endif">
                                             {{ $scholarship->type }}
                                         </span>
                                     </div>
@@ -236,10 +236,13 @@
                                     </div>
                                 </div>
 
-                                <button type="button"
-                                    class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-brand-600/5 mt-4">
-                                    Apply Now
-                                </button>
+                                <form action="{{ route('student.applications.store', $scholarship) }}" method="POST">
+                                    @csrf
+                                    <button type="submit"
+                                        class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-brand-600/5 mt-4">
+                                        Apply Now
+                                    </button>
+                                </form>
                             </div>
                         @endforeach
                     </div>

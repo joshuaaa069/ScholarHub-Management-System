@@ -17,7 +17,7 @@ class AuthController extends Controller
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
-            'role' => ['required', 'in:student,office'], 
+            'role' => ['required', 'in:student,office'],
         ]);
 
         $remember = $request->has('remember');
@@ -25,14 +25,14 @@ class AuthController extends Controller
         if (Auth::attempt($request->only('email', 'password'), $remember)) {
             $user = Auth::user();
 
-            // RULE 1: STRICTLY BLOCK SUPER ADMINS FROM THIS GATEWAY
-            if ($user->role === 'superadmin') {
+            // RULE 1: STRICTLY BLOCK SCHOOL REGISTRARS FROM THIS GATEWAY
+            if (in_array(strtolower($user->role), ['superadmin', 'school_registrar', 'registrar'])) {
                 Auth::logout();
                 $request->session()->invalidate();
                 $request->session()->regenerateToken();
 
                 return back()->withErrors([
-                    'email' => 'Access denied. Super Administrators must log in through the secure portal.',
+                    'email' => 'Access denied. School Registrars must log in through the secure registrar portal.',
                 ])->onlyInput('email');
             }
 
@@ -87,9 +87,9 @@ class AuthController extends Controller
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'dob' => ['required', 'date'],
-            'phone' => ['required', 'string'],
+            'phone' => ['required', 'string', 'unique:users'],
             // Step 2
-            'student_number' => ['required', 'string'],
+            'student_number' => ['required', 'string', 'unique:users'],
             'course' => ['required', 'string', 'max:255'],
             // GPA isn't collected on the registration form (it's filled in
             // later on the student's profile), so it must stay optional here.
@@ -130,8 +130,8 @@ class AuthController extends Controller
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
-            'phone' => ['nullable', 'string', 'max:20'],
-            'student_number' => ['nullable', 'string', 'max:50'],
+            'phone' => ['nullable', 'string', 'max:20', 'unique:users,phone,' . $user->id],
+            'student_number' => ['nullable', 'string', 'max:50', 'unique:users,student_number,' . $user->id],
             'course' => ['nullable', 'string', 'max:255'],
             'year_level' => ['nullable', 'string', 'max:50'],
             'gpa' => ['nullable', 'string', 'max:10'],

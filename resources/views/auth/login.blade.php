@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{{ asset('css/tailwind.css') }}"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -48,11 +48,10 @@
 
             <!-- Header Branding -->
             <div class="flex items-center gap-2.5 relative z-10">
-                <div class="w-9 h-9 rounded-xl bg-white flex items-center justify-center shadow-md">
-                    <svg class="w-5 h-5 text-brand-600" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
-                        <path d="M4.68 12.34V17c0 1.66 3.28 3 7.32 3s7.32-1.34 7.32-3v-4.66l-7.32 4-7.32-4z"/>
-                    </svg>
+                <div class="w-9 h-9 flex items-center justify-center">
+          <div class="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center shrink-0">
+            <img src="{{ asset('img/logo.png') }}" alt="ScholarHub Logo" class="w-full h-full object-cover">
+        </div>
                 </div>
                 <span class="text-lg font-black text-white tracking-tight">CKC ScholarHub</span>
             </div>

@@ -24,15 +24,15 @@ class LoginController extends Controller
             $request->session()->regenerate();
             $user = Auth::user();
 
-            // RULE 1: STRICTLY BLOCK SUPER ADMINS
-            // If the user logging in has a superadmin role, immediately kick them out!
-            if ($user->role === 'superadmin' || $user->role === 'admin_super') { 
+            // RULE 1: STRICTLY BLOCK SCHOOL REGISTRARS
+            // If the user logging in has a registrar role, immediately kick them out!
+            if (in_array(strtolower($user->role), ['superadmin', 'school_registrar', 'registrar', 'admin_super'])) {
                 Auth::logout();
                 $request->session()->invalidate();
                 $request->session()->regenerateToken();
 
                 return back()->withErrors([
-                    'email' => 'Access denied. Super Administrators must log in through the secure portal.',
+                    'email' => 'Access denied. School Registrars must log in through the secure registrar portal.',
                 ])->onlyInput('email');
             }
 
@@ -49,13 +49,13 @@ class LoginController extends Controller
                 }
 
                 // Force redirect to student dashboard
-                return redirect()->route('student.dashboard'); 
+                return redirect()->route('student.dashboard');
             }
 
             // RULE 3: ENFORCE SCHOLARSHIP OFFICE ROLE SELECTOR
             if ($request->role === 'office') {
                 // Adjust strings to match the exact role names in your database (e.g., 'officer', 'office_admin')
-                $allowedOfficeRoles = ['office', 'officer', 'scholarship_admin']; 
+                $allowedOfficeRoles = ['office', 'officer', 'scholarship_admin'];
 
                 if (!in_array($user->role, $allowedOfficeRoles)) {
                     Auth::logout();

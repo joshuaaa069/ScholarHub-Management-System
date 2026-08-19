@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Scholarship;
+use Illuminate\Support\Facades\Schema;
 
 class PublicController extends Controller
 {
@@ -12,10 +13,14 @@ class PublicController extends Controller
      */
     public function landing()
     {
-        $scholarships = Scholarship::where('status', 'Open')
-            ->orderBy('deadline', 'asc')
-            ->take(6)
-            ->get();
+        $scholarships = collect();
+
+        if (Schema::hasTable('scholarships')) {
+            $scholarships = Scholarship::where('status', 'Open')
+                ->orderBy('deadline', 'asc')
+                ->take(6)
+                ->get();
+        }
 
         return view('landingpage', compact('scholarships'));
     }

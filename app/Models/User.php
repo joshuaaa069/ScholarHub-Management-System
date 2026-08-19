@@ -7,6 +7,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Scholarship;
 
 class User extends Authenticatable
 {
@@ -24,6 +25,7 @@ class User extends Authenticatable
         'last_name',
         'dob',
         'phone',
+        'username',
         'student_number',
         'course',
         'gpa',
@@ -31,6 +33,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'scholarship_id',
         'scholarship_name',
         'status',
     ];
@@ -56,5 +59,9 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function scholarship()
+    {
+        return $this->belongsTo(Scholarship::class);
     }
 }

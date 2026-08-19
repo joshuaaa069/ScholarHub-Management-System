@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
 
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{{ asset('css/tailwind.css') }}"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -146,9 +146,11 @@
                             </div>
 
                             @if(!$notification->is_read)
-                                <form action="{{ route('student.notifications.read', $notification->id) }}" method="POST" class="shrink-0 self-start">
+                                <form action="{{ route('student.notifications.read', $notification->id) }}" method="POST"
+                                    class="shrink-0 self-start">
                                     @csrf
-                                    <button type="submit" class="text-[11px] font-bold text-brand-600 hover:text-brand-700 whitespace-nowrap">
+                                    <button type="submit"
+                                        class="text-[11px] font-bold text-brand-600 hover:text-brand-700 whitespace-nowrap">
                                         Mark as read
                                     </button>
                                 </form>

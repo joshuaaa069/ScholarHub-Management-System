@@ -72,6 +72,7 @@ Route::middleware(['auth'])->group(function () {
 
     // My Applications Route
     Route::get('/applications', [ApplicationController::class, 'index'])->name('student.applications');
+    Route::post('/applications/{scholarship}', [ApplicationController::class, 'store'])->name('student.applications.store');
 
     // Notifications Route
     Route::get('/notifications', [NotificationController::class, 'index'])->name('student.notifications');
@@ -117,6 +118,9 @@ Route::middleware(['auth', 'role:superadmin'])->group(function () {
 
     // Route to handle creating the Scholarship Admin
     Route::post('/superadmin/users', [SuperAdminUserController::class, 'store'])->name('superadmin.users.store');
+    Route::get('/superadmin/users/{user}', [SuperAdminUserController::class, 'show'])->name('superadmin.users.show');
+    Route::put('/superadmin/users/{user}/password', [SuperAdminUserController::class, 'updatePassword'])->name('superadmin.users.password');
+    Route::delete('/superadmin/users/{user}', [SuperAdminUserController::class, 'destroy'])->name('superadmin.users.destroy');
 
     // Scholarships (system-wide, full CRUD across all Scholarship Admins)
     Route::get('/superadmin/scholarships', [SuperAdminScholarshipController::class, 'index'])->name('superadmin.scholarships');

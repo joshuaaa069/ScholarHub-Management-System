@@ -32,6 +32,8 @@ class UserController extends Controller
             'scholarship_name' => ['required', 'string', 'max:255'],
             'password' => ['required', 'string', 'min:8'],
             'role' => ['required', 'string'],
+            'username' => ['nullable', 'string', 'max:255', 'unique:users,username'],
+            'phone' => ['nullable', 'string', 'max:255'],
         ], [
             'email.regex' => 'Please use a valid Gmail address (e.g. name@gmail.com).',
         ]);
@@ -41,6 +43,8 @@ class UserController extends Controller
             'first_name' => $validated['first_name'],
             'last_name' => $validated['last_name'],
             'email' => $validated['email'],
+            'username' => $validated['username'] ?? strtolower(str_replace(' ', '.', trim($validated['first_name'] . ' ' . $validated['last_name']))),
+            'phone' => $validated['phone'] ?? null,
             'scholarship_name' => $validated['scholarship_name'],
             'role' => $validated['role'],
             'status' => 'Active',
@@ -54,5 +58,41 @@ class UserController extends Controller
 
         return redirect()->route('superadmin.usermanage')
             ->with('success', 'Scholarship Admin account for "' . $validated['scholarship_name'] . '" successfully created!');
+    }
+
+    public function show(User $user)
+    {
+        return view('superadmin.usermanage', [
+            'users' => User::where('role', 'Scholarship Admin')->latest()->get(),
+            'totalUsers' => User::where('role', 'Scholarship Admin')->count(),
+            'selectedUser' => $user,
+        ]);
+    }
+
+    public function updatePassword(Request $request, User $user)
+    {
+        $validated = $request->validate([
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        $user->update([
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        AuditLog::record('Updated Scholarship Admin Password', $user->email);
+
+        return redirect()->route('superadmin.usermanage')
+            ->with('success', 'Password updated successfully for ' . $user->name . '.');
+    }
+
+    public function destroy(User $user)
+    {
+        $name = $user->name;
+        $user->delete();
+
+        AuditLog::record('Deleted Scholarship Admin', $name . ' (' . $user->email . ')');
+
+        return redirect()->route('superadmin.usermanage')
+            ->with('success', 'Scholarship Admin account for "' . $name . '" was deleted.');
     }
 }

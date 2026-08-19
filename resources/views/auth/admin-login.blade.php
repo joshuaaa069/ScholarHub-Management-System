@@ -4,13 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Super Admin Login - CKC ScholarHub</title>
+    <title>School Registrar Login - CKC ScholarHub</title>
     <link rel="icon" type="image/png" href="{{ asset('img/logo.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{{ asset('css/tailwind.css') }}"></script>
+
     <script>
         tailwind.config = { theme: { fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] } } }
     </script>
@@ -28,7 +29,7 @@
             <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">CKC ScholarHub</h2>
             <span
                 class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700">
-                System Administrator
+                School Registrar
             </span>
         </div>
 
@@ -59,7 +60,7 @@
 
             <button type="submit"
                 class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-xl shadow-lg shadow-blue-500/20 transition-all">
-                Access Workspace
+                Access Registrar Workspace
             </button>
         </form>
 

@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&display=swap"
         rel="stylesheet">
 
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{{ asset('css/tailwind.css') }}"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -117,7 +117,8 @@
                                 class="text-[10px] font-extrabold text-slate-400 block uppercase tracking-wider">Available
                                 Scholarships</span>
                             <h3 class="text-3xl font-extrabold text-slate-900 tracking-tight">
-                                {{ $stats['available_scholarships'] ?? 0 }}</h3>
+                                {{ $stats['available_scholarships'] ?? 0 }}
+                            </h3>
                             @if(!empty($stats['available_scholarships_delta']))
                                 <span class="text-[10px] font-bold text-emerald-600 flex items-center gap-0.5 pt-1">
                                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
@@ -148,7 +149,8 @@
                                 class="text-[10px] font-extrabold text-slate-400 block uppercase tracking-wider">Submitted
                                 Applications</span>
                             <h3 class="text-3xl font-extrabold text-slate-900 tracking-tight">
-                                {{ $stats['submitted_applications'] ?? 0 }}</h3>
+                                {{ $stats['submitted_applications'] ?? 0 }}
+                            </h3>
                             <span
                                 class="text-[10px] font-medium text-slate-400 block pt-1">{{ $stats['submitted_applications_note'] ?? 'No updates today' }}</span>
                         </div>
@@ -167,7 +169,8 @@
                             <span
                                 class="text-[10px] font-extrabold text-slate-400 block uppercase tracking-wider">Approved</span>
                             <h3 class="text-3xl font-extrabold text-slate-900 tracking-tight">
-                                {{ $stats['approved'] ?? 0 }}</h3>
+                                {{ $stats['approved'] ?? 0 }}
+                            </h3>
                             @if(!empty($stats['approved_delta']))
                                 <span class="text-[10px] font-bold text-emerald-600 flex items-center gap-0.5 pt-1">
                                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
@@ -198,7 +201,8 @@
                                 class="text-[10px] font-extrabold text-slate-400 block uppercase tracking-wider">Pending
                                 Review</span>
                             <h3 class="text-3xl font-extrabold text-slate-900 tracking-tight">
-                                {{ $stats['pending_review'] ?? 0 }}</h3>
+                                {{ $stats['pending_review'] ?? 0 }}
+                            </h3>
                             <span class="text-[10px] font-medium text-slate-400 block pt-1">Awaiting decision</span>
                         </div>
                         <div
@@ -277,7 +281,8 @@
                                         </div>
                                         <div class="flex-1 min-w-0">
                                             <h4 class="text-xs font-bold text-slate-800 leading-snug truncate">
-                                                {{ $announcement['title'] }}</h4>
+                                                {{ $announcement['title'] }}
+                                            </h4>
                                             <span
                                                 class="text-[10px] text-slate-400 mt-1 block font-semibold">{{ \Illuminate\Support\Carbon::parse($announcement['date'])->format('M j, Y') }}</span>
                                         </div>
@@ -308,7 +313,8 @@
                                     </div>
                                     <div class="flex-1 min-w-0">
                                         <h4 class="text-xs font-bold text-slate-800 truncate leading-snug">
-                                            {{ $deadline['name'] }}</h4>
+                                            {{ $deadline['name'] }}
+                                        </h4>
                                         <span class="text-[10px] text-red-500 font-bold flex items-center gap-1 mt-0.5">
                                             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                                 stroke-width="2.5">

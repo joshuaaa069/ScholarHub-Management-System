@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{{ asset('css/tailwind.css') }}"></script>
     <script>
         tailwind.config = { theme: { extend: { fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }, colors: { brand: { 50: '#f0f4ff', 100: '#d9e2ff', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 950: '#0b0f19' } } } } }
     </script>
@@ -38,8 +38,8 @@
                 </div>
                 <div class="flex items-center gap-3 ml-auto">
                     <div class="text-right hidden sm:block">
-                        <h4 class="text-xs font-bold text-slate-800 leading-tight">Super Admin</h4>
-                        <span class="text-[10px] text-slate-400 font-medium block">System Administrator</span>
+                        <h4 class="text-xs font-bold text-slate-800 leading-tight">School Registrar</h4>
+                        <span class="text-[10px] text-slate-400 font-medium block">Registrar Office</span>
                     </div>
                     <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 font-bold flex items-center justify-center text-sm border border-blue-200 shrink-0">SA</div>
                 </div>
