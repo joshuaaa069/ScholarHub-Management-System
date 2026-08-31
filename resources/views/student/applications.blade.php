@@ -142,31 +142,36 @@
                                         <td class="px-6 py-5">
                                             @php
                                                 $statusClasses = match ($app->status) {
-                                                    'Under Review' => 'bg-blue-50 text-blue-600 border border-blue-100',
+                                                    'Registrar Approved' => 'bg-blue-50 text-blue-600 border border-blue-100',
                                                     'Approved' => 'bg-emerald-50 text-emerald-600 border border-emerald-100',
+                                                    'Registrar Rejected' => 'bg-orange-50 text-orange-600 border border-orange-100',
+                                                    'Rejected' => 'bg-rose-50 text-rose-600 border border-rose-100',
                                                     'Needs Revision' => 'bg-purple-50 text-purple-600 border border-purple-100',
-                                                    default => 'bg-slate-50 text-slate-600 border border-slate-200'
+                                                    default => 'bg-amber-50 text-amber-600 border border-amber-100',
+                                                };
+                                                $dotClass = match ($app->status) {
+                                                    'Registrar Approved' => 'bg-blue-500',
+                                                    'Approved' => 'bg-emerald-500',
+                                                    'Registrar Rejected' => 'bg-orange-500',
+                                                    'Rejected' => 'bg-rose-500',
+                                                    'Needs Revision' => 'bg-purple-500',
+                                                    default => 'bg-amber-500',
                                                 };
                                             @endphp
                                             <span
                                                 class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-wide {{ $statusClasses }}">
-                                                @if($app->status === 'Under Review')
-                                                    <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
-                                                @elseif($app->status === 'Approved')
-                                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                                                @elseif($app->status === 'Needs Revision')
-                                                    <span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
-                                                @else
-                                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
-                                                @endif
-                                                {{ $app->status }}
+                                                <span class="w-1.5 h-1.5 rounded-full {{ $dotClass }}"></span>
+                                                {{ \App\Models\Application::stageLabel($app->status) }}
                                             </span>
                                         </td>
 
                                         <td class="px-6 py-5">
+                                            @php
+                                                $latestRemarks = $app->admin_remarks ?: $app->registrar_remarks ?: $app->remarks;
+                                            @endphp
                                             <p class="text-xs font-medium text-slate-500 line-clamp-2"
-                                                title="{{ $app->remarks }}">
-                                                {{ $app->remarks ?? 'No remarks added yet.' }}
+                                                title="{{ $latestRemarks }}">
+                                                {{ $latestRemarks ?? 'No remarks added yet.' }}
                                             </p>
                                         </td>
 
@@ -177,7 +182,7 @@
                                         </td>
 
                                         <td class="px-6 py-5 text-right">
-                                            <a href="/applications/{{ $app->id }}"
+                                            <a href="{{ route('student.applications.show', $app) }}"
                                                 class="inline-flex items-center gap-1 text-xs font-extrabold text-slate-400 hover:text-brand-600 transition-colors">
                                                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                                     stroke-width="2">

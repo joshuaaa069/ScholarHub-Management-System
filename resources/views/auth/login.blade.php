@@ -90,16 +90,16 @@
             <!-- Footer Metrics Dashboard Counters Row (Directly from CKC Metrics section) -->
             <div class="grid grid-cols-3 gap-4 border-t border-white/10 pt-8 relative z-10">
                 <div>
-                    <span class="block text-2xl font-black text-yellow-400 tracking-tight">150+</span>
+                    <span class="block text-2xl font-black text-yellow-400 tracking-tight">{{ $stats['active_scholars'] ?? '0' }}</span>
                     <span class="text-[10px] text-blue-200 uppercase tracking-widest font-bold">Scholars</span>
                 </div>
                 <div>
-                    <span class="block text-2xl font-black text-yellow-400 tracking-tight">5</span>
+                    <span class="block text-2xl font-black text-yellow-400 tracking-tight">{{ $stats['scholarship_programs'] ?? '0' }}</span>
                     <span class="text-[10px] text-blue-200 uppercase tracking-widest font-bold">Programs</span>
                 </div>
                 <div>
-                    <span class="block text-2xl font-black text-yellow-400 tracking-tight">P2M+</span>
-                    <span class="text-[10px] text-blue-200 uppercase tracking-widest font-bold">Fundings</span>
+                    <span class="block text-2xl font-black text-yellow-400 tracking-tight">{{ $stats['total_slots'] ?? '0' }}</span>
+                    <span class="text-[10px] text-blue-200 uppercase tracking-widest font-bold">Total Slots</span>
                 </div>
             </div>
         </div>

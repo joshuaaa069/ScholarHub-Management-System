@@ -44,7 +44,11 @@ class DashboardController extends Controller
             'approved_delta' => (clone $myApplications)->where('status', 'Approved')
                 ->where('updated_at', '>=', now()->subMonth())
                 ->count(),
-            'pending_review' => (clone $myApplications)->whereIn('status', ['Pending', 'Under Review'])->count(),
+            'pending_review' => (clone $myApplications)->whereIn('status', [
+                Application::STATUS_PENDING,
+                Application::STATUS_REGISTRAR_APPROVED,
+                'Under Review',
+            ])->count(),
         ];
 
         // Last 6 months of this student's application activity, for the bar chart

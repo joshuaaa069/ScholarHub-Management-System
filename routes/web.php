@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
 
 // Import AuthControllers using clear aliases to resolve conflict
 use App\Http\Controllers\AuthController as StudentAuthController;
@@ -26,6 +27,7 @@ use App\Http\Controllers\ScholarshipAdmin\StudentController as ScholarshipAdminS
 use App\Http\Controllers\ScholarshipAdmin\ReportController as ScholarshipAdminReportController;
 use App\Http\Controllers\ScholarshipAdmin\AnnouncementController as ScholarshipAdminAnnouncementController;
 use App\Http\Controllers\ScholarshipAdmin\SettingsController as ScholarshipAdminSettingsController;
+use App\Http\Controllers\Registrar\RegistrarController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,7 +40,32 @@ Route::get('/', [PublicController::class, 'landing'])->name('landingpage');
 Route::middleware('guest')->group(function () {
     // Student Auth Routes
     Route::get('/login', function () {
-        return view('auth.login');
+        $stats = [
+            'active_scholars'      => '0',
+            'scholarship_programs' => '0',
+            'total_slots'          => '0',
+        ];
+        try {
+            if (Schema::hasTable('applications')) {
+                $stats['active_scholars'] = (string) \App\Models\Application::where('status', \App\Models\Application::STATUS_APPROVED)->count();
+            }
+        } catch (\Throwable $e) {}
+        try {
+            if (Schema::hasTable('scholarships')) {
+                $stats['scholarship_programs'] = (string) \App\Models\Scholarship::where('status', 'Open')->count();
+                // Available seats = sum(slots_total) − count(approved apps).
+                // Only finalized (Approved) awards eat from the pool;
+                // pending / registrar-approved / rejected apps do not.
+                $totalSeats = (int) \App\Models\Scholarship::where('status', 'Open')->sum('slots_total');
+                $accepted   = 0;
+                if (Schema::hasTable('applications')) {
+                    $accepted = (int) \App\Models\Application::where('status', \App\Models\Application::STATUS_APPROVED)->count();
+                }
+                $stats['total_slots'] = (string) max(0, $totalSeats - $accepted);
+            }
+        } catch (\Throwable $e) {}
+
+        return view('auth.login', ['stats' => $stats]);
     })->name('login');
 
     Route::get('/register', function () {
@@ -72,7 +99,17 @@ Route::middleware(['auth'])->group(function () {
 
     // My Applications Route
     Route::get('/applications', [ApplicationController::class, 'index'])->name('student.applications');
+
+    // Apply flow: GET shows the document upload form, POST persists the
+    // application together with all required documents.
+    Route::get('/applications/{scholarship}/apply', [ApplicationController::class, 'create'])->name('student.applications.create');
     Route::post('/applications/{scholarship}', [ApplicationController::class, 'store'])->name('student.applications.store');
+
+    // View a single application (with all uploaded documents)
+    Route::get('/applications/{application}/show', [ApplicationController::class, 'show'])->name('student.applications.show');
+
+    // Authenticated file download
+    Route::get('/applications/{application}/documents/{document}/download', [ApplicationController::class, 'downloadDocument'])->name('student.applications.documents.download');
 
     // Notifications Route
     Route::get('/notifications', [NotificationController::class, 'index'])->name('student.notifications');
@@ -162,6 +199,12 @@ Route::middleware(['auth', 'role:office,officer,admin,scholarship admin'])
         // Application Decision Handling Route (Resolves to URL: /scholarshipadmin/applications/{application}/action)
         Route::post('/applications/{application}/action', [ScholarshipAdminController::class, 'action'])->name('applications.action');
 
+        // View a single application (and its uploaded documents)
+        Route::get('/applications/{application}/show', [ScholarshipAdminController::class, 'show'])->name('applications.show');
+
+        // Authenticated file download (so the URL doesn't 403)
+        Route::get('/applications/{application}/documents/{document}/download', [ScholarshipAdminController::class, 'downloadDocument'])->name('applications.documents.download');
+
         // Scholarship Programs (Create Scholarship)
         Route::get('/programs', [ScholarshipAdminProgramController::class, 'index'])->name('programs');
         Route::post('/programs', [ScholarshipAdminProgramController::class, 'store'])->name('programs.store');
@@ -186,4 +229,30 @@ Route::middleware(['auth', 'role:office,officer,admin,scholarship admin'])
         Route::get('/settings', [ScholarshipAdminSettingsController::class, 'index'])->name('settings');
         Route::put('/settings/profile', [ScholarshipAdminSettingsController::class, 'updateProfile'])->name('settings.profile');
         Route::put('/settings/password', [ScholarshipAdminSettingsController::class, 'updatePassword'])->name('settings.password');
+    });
+
+/*
+|--------------------------------------------------------------------------
+| Registrar Routes (Stage 1: first-pass review of student applications)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'role:school_registrar,registrar'])
+    ->prefix('registrar')->name('registrar.')->group(function () {
+        // Dashboard
+        Route::get('/dashboard', [RegistrarController::class, 'index'])->name('dashboard');
+
+        // Full applications list (search/filter)
+        Route::get('/applications', [RegistrarController::class, 'applications'])->name('applications');
+
+        // Stage 1 action: endorse or reject an application
+        Route::post('/applications/{application}/action', [RegistrarController::class, 'action'])->name('applications.action');
+
+        // View a single application (and its uploaded documents)
+        Route::get('/applications/{application}/show', [RegistrarController::class, 'show'])->name('applications.show');
+
+        // Authenticated file download
+        Route::get('/applications/{application}/documents/{document}/download', [RegistrarController::class, 'downloadDocument'])->name('applications.documents.download');
+
+        // Logout
+        Route::post('/logout', [RegistrarController::class, 'logout'])->name('logout');
     });

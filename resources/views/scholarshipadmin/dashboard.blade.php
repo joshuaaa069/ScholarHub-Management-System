@@ -158,13 +158,13 @@
                         <div class="text-[10px] text-slate-400 font-medium">Active roster metrics</div>
                     </div>
 
-                    <!-- Card 2: Pending Applications -->
+                    <!-- Card 2: Pending at Registrar -->
                     <div
                         class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between min-h-[135px]">
                         <div class="flex justify-between items-start">
                             <div>
                                 <p class="text-[10px] lg:text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                                    Pending</p>
+                                    At Registrar</p>
                                 <h3 class="text-2xl font-extrabold text-slate-900 mt-2">
                                     {{ number_format($metrics['pending'] ?? 0) }}
                                 </h3>
@@ -178,18 +178,18 @@
                                 </svg>
                             </div>
                         </div>
-                        <div class="text-[10px] text-slate-400 font-medium">Awaiting primary filtration</div>
+                        <div class="text-[10px] text-slate-400 font-medium">Stage 1 — awaiting registrar</div>
                     </div>
 
-                    <!-- Card 3: Recommended -->
+                    <!-- Card 3: Awaiting Your Decision -->
                     <div
                         class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between min-h-[135px]">
                         <div class="flex justify-between items-start">
                             <div>
                                 <p class="text-[10px] lg:text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                                    Recommended</p>
+                                    Awaiting Decision</p>
                                 <h3 class="text-2xl font-extrabold text-slate-900 mt-2">
-                                    {{ number_format($metrics['recommended'] ?? 0) }}
+                                    {{ number_format($metrics['awaitingDecision'] ?? 0) }}
                                 </h3>
                             </div>
                             <div
@@ -201,7 +201,7 @@
                                 </svg>
                             </div>
                         </div>
-                        <div class="text-[10px] text-slate-400 font-medium">Verified by review officers</div>
+                        <div class="text-[10px] text-slate-400 font-medium">Endorsed by registrar — your queue</div>
                     </div>
 
                     <!-- Card 4: Approved Scholars -->
@@ -346,9 +346,8 @@
                     <div
                         class="p-4 sm:p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <div>
-                            <h2 class="text-base font-bold text-slate-900">Application Review Queue</h2>
-                            <p class="text-xs text-slate-400 mt-0.5">Officer-recommended applications awaiting final
-                                decisions</p>
+                            <h2 class="text-base font-bold text-slate-900">Final Decision Queue</h2>
+                            <p class="text-xs text-slate-400 mt-0.5">Applications endorsed by the registrar awaiting your final accept/reject decision.</p>
                         </div>
                         <div class="flex items-center space-x-2 self-start sm:self-auto">
                             <button
@@ -410,17 +409,17 @@
                                         <td class="py-4 px-6">
                                             <span class="px-2.5 py-1 rounded-lg text-[10px] font-extrabold tracking-wide uppercase inline-flex items-center space-x-1
                                                     {{ $app->status === 'Approved' ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' : '' }}
-                                                    {{ $app->status === 'Under Review' || $app->status === 'Pending' ? 'bg-blue-50 text-blue-700 border border-blue-100' : '' }}
+                                                    {{ $app->status === 'Registrar Approved' ? 'bg-blue-50 text-blue-700 border border-blue-100' : '' }}
                                                     {{ $app->status === 'Needs Revision' ? 'bg-purple-50 text-purple-700 border border-purple-100' : '' }}
-                                                    {{ $app->status === 'Rejected' ? 'bg-rose-50 text-rose-700 border border-rose-100' : '' }}
+                                                    {{ $app->status === 'Rejected' || $app->status === 'Registrar Rejected' ? 'bg-rose-50 text-rose-700 border border-rose-100' : '' }}
                                                 ">
-                                                <span class="w-1 h-1 rounded-full shrink-0 
+                                                <span class="w-1 h-1 rounded-full shrink-0
                                                         {{ $app->status === 'Approved' ? 'bg-emerald-600' : '' }}
-                                                        {{ $app->status === 'Under Review' || $app->status === 'Pending' ? 'bg-blue-600' : '' }}
+                                                        {{ $app->status === 'Registrar Approved' ? 'bg-blue-600' : '' }}
                                                         {{ $app->status === 'Needs Revision' ? 'bg-purple-600' : '' }}
-                                                        {{ $app->status === 'Rejected' ? 'bg-rose-600' : '' }}
+                                                        {{ $app->status === 'Rejected' || $app->status === 'Registrar Rejected' ? 'bg-rose-600' : '' }}
                                                     "></span>
-                                                <span>{{ $app->status ?? 'Under Review' }}</span>
+                                                <span>{{ $app->status ?? 'Registrar Approved' }}</span>
                                             </span>
                                         </td>
                                         <td class="py-4 px-6 font-mono font-bold text-slate-900 text-sm">
@@ -428,6 +427,13 @@
                                         </td>
                                         <td class="py-4 px-6 text-right">
                                             <div class="inline-flex items-center justify-end space-x-2">
+                                                <a href="{{ route('scholarshipadmin.applications.show', $app->id) }}"
+                                                    class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold rounded-lg transition">
+                                                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                    </svg>
+                                                    <span>Docs</span>
+                                                </a>
                                                 <form action="{{ route('scholarshipadmin.applications.action', $app->id) }}"
                                                     method="POST" class="inline m-0">
                                                     @csrf
@@ -456,15 +462,6 @@
                                                         <span>Reject</span>
                                                     </button>
                                                 </form>
-                                                <a href="#"
-                                                    class="border border-slate-200 hover:bg-slate-50 text-slate-600 text-[11px] font-bold px-3 py-1.5 rounded-lg transition flex items-center space-x-1">
-                                                    <svg class="w-3 h-3 text-slate-400" fill="none" viewBox="0 0 24 24"
-                                                        stroke="currentColor" stroke-width="2.5">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-                                                    </svg>
-                                                    <span>Assign</span>
-                                                </a>
                                             </div>
                                         </td>
                                     </tr>

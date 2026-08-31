@@ -26,6 +26,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Seed the canonical list of required documents (Assessment Form, Grade
+        // Slip, Prospectus, Certificate of Non-availment) so the upload flow
+        // and landing page have a baseline.
+        $this->call(DocumentRequirementSeeder::class);
+
         if (! User::where('role', 'superadmin')->exists()) {
             User::create([
                 'name' => 'Super Admin',

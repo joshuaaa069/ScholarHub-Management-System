@@ -19,7 +19,19 @@
 
 <body class="font-sans antialiased h-full flex items-center justify-center p-4">
 
-    <div class="w-full max-w-md bg-white rounded-3xl border border-slate-100 shadow-xl p-8 space-y-6">
+    <div class="w-full max-w-md">
+
+        <div class="mb-4">
+            <a href="{{ route('landingpage') }}"
+                class="inline-flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-slate-800 transition-colors">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Back to Home
+            </a>
+        </div>
+
+        <div class="bg-white rounded-3xl border border-slate-100 shadow-xl p-8 space-y-6">
 
         <div class="text-center space-y-2">
             <div class="w-14 h-14 flex items-center justify-center mx-auto overflow-hidden">
@@ -63,6 +75,8 @@
                 Access Registrar Workspace
             </button>
         </form>
+
+        </div>
 
     </div>
 

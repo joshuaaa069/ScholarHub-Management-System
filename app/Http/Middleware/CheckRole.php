@@ -23,8 +23,15 @@ class CheckRole
             return $next($request);
         }
 
-        // If a registrar tries to access student routes, send them to their own dashboard
-        if (in_array(strtolower($user->role), ['superadmin', 'school_registrar', 'registrar'])) {
+        // If a registrar tries to access student/scholarship-admin routes, send
+        // them to the registrar dashboard.
+        if (in_array(strtolower($user->role), ['school_registrar', 'registrar'])) {
+            return redirect()->route('registrar.dashboard');
+        }
+
+        // If a superadmin (or related) tries to access student routes, send them
+        // to the super admin dashboard.
+        if (in_array(strtolower($user->role), ['superadmin'])) {
             return redirect()->route('superadmin.dashboard');
         }
 

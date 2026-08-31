@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-it('shows the first-step scholarship flow with continue and the final publish step', function () {
+it('shows the first-step scholarship flow with continue and the create scholarship step', function () {
     $registrar = User::factory()->create([
         'role' => 'superadmin',
         'email' => 'registrar@example.com',
@@ -16,7 +16,7 @@ it('shows the first-step scholarship flow with continue and the final publish st
         ->get('/superadmin/scholarships')
         ->assertOk()
         ->assertSee('Continue')
-        ->assertSee('Publish');
+        ->assertSee('Create Scholarship');
 });
 
 it('hides create scholarship admin and shows account management actions', function () {

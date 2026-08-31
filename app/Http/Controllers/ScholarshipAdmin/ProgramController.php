@@ -15,7 +15,15 @@ class ProgramController extends Controller
      */
     public function index()
     {
-        $scholarships = Scholarship::withCount('applications')->latest()->get();
+        $query = Scholarship::withCount('applications')->latest();
+
+        // Scope: a scholarship admin only manages the program they own.
+        $ownScholarshipId = optional(Auth::user())->scholarship_id;
+        if (!is_null($ownScholarshipId)) {
+            $query->where('id', $ownScholarshipId);
+        }
+
+        $scholarships = $query->get();
 
         return view('scholarshipadmin.programs', compact('scholarships'));
     }

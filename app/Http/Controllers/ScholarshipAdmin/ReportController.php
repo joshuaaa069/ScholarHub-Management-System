@@ -14,15 +14,27 @@ class ReportController extends Controller
      */
     public function index()
     {
+        $ownScholarshipId = optional(\Illuminate\Support\Facades\Auth::user())->scholarship_id;
+        $scoped = function ($query) use ($ownScholarshipId) {
+            if (!is_null($ownScholarshipId)) {
+                $query->where('scholarship_id', $ownScholarshipId);
+            }
+        };
+
         $summary = [
             'totalStudents' => User::where('role', 'student')->count(),
-            'totalApplications' => Application::count(),
-            'approved' => Application::where('status', 'Approved')->count(),
-            'rejected' => Application::where('status', 'Rejected')->count(),
-            'underReview' => Application::whereIn('status', ['Pending', 'Under Review'])->count(),
+            'totalApplications' => Application::where($scoped)->count(),
+            'approved' => Application::where($scoped)->where('status', 'Approved')->count(),
+            'rejected' => Application::where($scoped)->where('status', 'Rejected')->count(),
+            'underReview' => Application::where($scoped)->whereIn('status', ['Pending', 'Under Review'])->count(),
         ];
 
-        $scholarshipBreakdown = Scholarship::withCount([
+        $scholarships = Scholarship::query();
+        if (!is_null($ownScholarshipId)) {
+            $scholarships->where('id', $ownScholarshipId);
+        }
+
+        $scholarshipBreakdown = $scholarships->withCount([
             'applications',
             'applications as approved_count' => function ($query) {
                 $query->where('status', 'Approved');

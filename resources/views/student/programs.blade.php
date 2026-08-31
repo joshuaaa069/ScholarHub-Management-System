@@ -236,13 +236,10 @@
                                     </div>
                                 </div>
 
-                                <form action="{{ route('student.applications.store', $scholarship) }}" method="POST">
-                                    @csrf
-                                    <button type="submit"
-                                        class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-brand-600/5 mt-4">
-                                        Apply Now
-                                    </button>
-                                </form>
+                                <a href="{{ route('student.applications.create', $scholarship) }}"
+                                    class="w-full block text-center py-3 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-brand-600/5 mt-4">
+                                    Apply Now
+                                </a>
                             </div>
                         @endforeach
                     </div>

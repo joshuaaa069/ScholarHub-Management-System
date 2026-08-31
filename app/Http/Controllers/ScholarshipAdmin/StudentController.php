@@ -17,6 +17,14 @@ class StudentController extends Controller
     {
         $query = User::where('role', 'student');
 
+        // Scope: only show students who applied to this admin's scholarship.
+        $ownScholarshipId = optional(\Illuminate\Support\Facades\Auth::user())->scholarship_id;
+        if (!is_null($ownScholarshipId)) {
+            $query->whereHas('applications', function ($q) use ($ownScholarshipId) {
+                $q->where('scholarship_id', $ownScholarshipId);
+            });
+        }
+
         if ($request->filled('search')) {
             $term = $request->search;
             $query->where(function ($q) use ($term) {
@@ -28,11 +36,14 @@ class StudentController extends Controller
 
         $students = $query->latest()->paginate(15)->withQueryString();
 
-        // Mark which of the listed students already have an Approved application
-        $scholarIds = Application::where('status', 'Approved')
-            ->whereIn('user_id', $students->pluck('id'))
-            ->pluck('user_id')
-            ->unique();
+        // Mark which of the listed students already have an Approved
+        // application on this admin's scholarship.
+        $scholarQuery = Application::where('status', 'Approved')
+            ->whereIn('user_id', $students->pluck('id'));
+        if (!is_null($ownScholarshipId)) {
+            $scholarQuery->where('scholarship_id', $ownScholarshipId);
+        }
+        $scholarIds = $scholarQuery->pluck('user_id')->unique();
 
         return view('scholarshipadmin.students', compact('students', 'scholarIds'));
     }

@@ -9,11 +9,17 @@ use App\Models\User; // Make sure to import your User model here for the dashboa
 
 class AuthController extends Controller // <-- MAKE SURE THIS SAYS AuthController, NOT UserController
 {
-    // Show the Super Admin Login Page
+    // Show the Admin / Registrar Login Page
     public function showLogin()
     {
-        if (Auth::check() && in_array(strtolower(Auth::user()->role), ['superadmin', 'school_registrar', 'registrar'])) {
-            return redirect()->route('superadmin.dashboard');
+        if (Auth::check()) {
+            $role = strtolower(Auth::user()->role);
+            if ($role === 'superadmin') {
+                return redirect()->route('superadmin.dashboard');
+            }
+            if (in_array($role, ['school_registrar', 'registrar'], true)) {
+                return redirect()->route('registrar.dashboard');
+            }
         }
         return view('auth.admin-login');
     }
@@ -27,9 +33,16 @@ class AuthController extends Controller // <-- MAKE SURE THIS SAYS AuthControlle
         ]);
 
         if (Auth::attempt($credentials)) {
-            if (in_array(strtolower(Auth::user()->role), ['superadmin', 'school_registrar', 'registrar'])) {
+            $role = strtolower(Auth::user()->role);
+
+            if ($role === 'superadmin') {
                 $request->session()->regenerate();
                 return redirect()->intended(route('superadmin.dashboard'));
+            }
+
+            if (in_array($role, ['school_registrar', 'registrar'], true)) {
+                $request->session()->regenerate();
+                return redirect()->intended(route('registrar.dashboard'));
             }
 
             Auth::logout();

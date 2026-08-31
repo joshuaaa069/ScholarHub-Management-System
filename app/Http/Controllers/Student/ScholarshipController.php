@@ -18,9 +18,9 @@ class ScholarshipController extends Controller
         // 2. Real-time Search Logic
         if ($request->has('search') && !empty($request->search)) {
             $searchTerm = $request->search;
-            $query->where(function($q) use ($searchTerm) {
+            $query->where(function ($q) use ($searchTerm) {
                 $q->where('title', 'LIKE', "%{$searchTerm}%")
-                  ->orWhere('provider', 'LIKE', "%{$searchTerm}%");
+                    ->orWhere('provider', 'LIKE', "%{$searchTerm}%");
             });
         }
 
