@@ -336,9 +336,9 @@
                         </svg>
                     </div>
                     <div>
-                        <p class="text-sm font-black text-slate-900">{{ $stats['satisfaction_rate'] ?? '0%' }}
-                            Satisfaction</p>
-                        <p class="text-[10px] text-slate-400 font-medium">From active scholars</p>
+                        <p class="text-sm font-black text-slate-900">{{ $stats['satisfaction_rate'] ?? '0' }}
+                            Verified Scholars</p>
+                        <p class="text-[10px] text-slate-400 font-medium">Currently active</p>
                     </div>
                 </div>
             </div>

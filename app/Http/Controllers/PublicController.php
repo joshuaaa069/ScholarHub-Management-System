@@ -87,7 +87,7 @@ class PublicController extends Controller
             // keep defaults
         }
 
-        $stats['satisfaction_rate'] = '98%';
+        $stats['satisfaction_rate'] = $stats['active_scholars'];
 
         // Public contact information shown on the landing page. These are
         // hard-coded defaults that mirror the school's official channels —

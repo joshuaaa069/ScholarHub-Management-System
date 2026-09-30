@@ -10,8 +10,6 @@ use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Storage;
 
 class RegistrarController extends Controller
 {
@@ -139,20 +137,5 @@ class RegistrarController extends Controller
         abort_unless($document->student_file_path, 404);
 
         return $this->streamFile($document->student_file_path, $document->student_original_name);
-    }
-
-    protected function streamFile(string $path, ?string $downloadName = null)
-    {
-        $disk = Storage::disk('public');
-        abort_unless($disk->exists($path), 404);
-
-        $fullPath = $disk->path($path);
-        $mime = $disk->mimeType($path) ?: 'application/octet-stream';
-        $name = $downloadName ?: basename($path);
-
-        return Response::make(file_get_contents($fullPath), 200, [
-            'Content-Type'        => $mime,
-            'Content-Disposition' => 'inline; filename="' . $name . '"',
-        ]);
     }
 }

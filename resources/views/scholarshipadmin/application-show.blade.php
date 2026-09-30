@@ -131,7 +131,7 @@
                                         <p class="text-[11px] text-slate-500 mt-1 truncate">{{ $doc->student_original_name ?? 'No file uploaded' }}</p>
                                     </div>
                                     @if($doc->student_file_path)
-                                        <a href="{{ asset('storage/' . $doc->student_file_path) }}" target="_blank"
+                                        <a href="{{ route('scholarshipadmin.applications.documents.download', [$application, $doc]) }}" target="_blank" rel="noopener noreferrer"
                                             class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold rounded-lg transition">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                                             View

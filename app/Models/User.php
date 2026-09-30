@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Scholarship;
+use App\Models\Application;
 
 class User extends Authenticatable
 {
@@ -60,8 +61,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
     public function scholarship()
     {
         return $this->belongsTo(Scholarship::class);
+    }
+
+    public function applications()
+    {
+        return $this->hasMany(Application::class, 'user_id');
     }
 }

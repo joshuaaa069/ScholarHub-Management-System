@@ -10,7 +10,6 @@ use App\Models\Notification;
 use App\Models\Scholarship;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -56,25 +55,6 @@ class ApplicationController extends Controller
         abort_unless($document->student_file_path, 404);
 
         return $this->streamFile($document->student_file_path, $document->student_original_name);
-    }
-
-    /**
-     * Stream a file from the public disk to the browser. Returns 404 if the
-     * file is missing on disk so the user gets a clean error.
-     */
-    protected function streamFile(string $path, ?string $downloadName = null)
-    {
-        $disk = Storage::disk('public');
-        abort_unless($disk->exists($path), 404);
-
-        $fullPath = $disk->path($path);
-        $mime = $disk->mimeType($path) ?: 'application/octet-stream';
-        $name = $downloadName ?: basename($path);
-
-        return Response::make(file_get_contents($fullPath), 200, [
-            'Content-Type'        => $mime,
-            'Content-Disposition' => 'inline; filename="' . $name . '"',
-        ]);
     }
 
     /**

@@ -45,22 +45,27 @@ Route::middleware('guest')->group(function () {
             'scholarship_programs' => '0',
             'total_slots'          => '0',
         ];
+
         try {
             if (Schema::hasTable('applications')) {
                 $stats['active_scholars'] = (string) \App\Models\Application::where('status', \App\Models\Application::STATUS_APPROVED)->count();
             }
         } catch (\Throwable $e) {}
+
         try {
             if (Schema::hasTable('scholarships')) {
                 $stats['scholarship_programs'] = (string) \App\Models\Scholarship::where('status', 'Open')->count();
+
                 // Available seats = sum(slots_total) − count(approved apps).
                 // Only finalized (Approved) awards eat from the pool;
                 // pending / registrar-approved / rejected apps do not.
                 $totalSeats = (int) \App\Models\Scholarship::where('status', 'Open')->sum('slots_total');
                 $accepted   = 0;
+
                 if (Schema::hasTable('applications')) {
                     $accepted = (int) \App\Models\Application::where('status', \App\Models\Application::STATUS_APPROVED)->count();
                 }
+
                 $stats['total_slots'] = (string) max(0, $totalSeats - $accepted);
             }
         } catch (\Throwable $e) {}
@@ -133,6 +138,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/profile/password', [StudentAuthController::class, 'updatePassword'])->name('profile.password');
 });
 
+
 /*
 |--------------------------------------------------------------------------
 | Protected Super Admin Routes
@@ -144,11 +150,13 @@ Route::get('/superadmin', function () {
     if (Auth::check() && Auth::user()->role === 'superadmin') {
         return redirect()->route('superadmin.dashboard');
     }
+
     return redirect()->route('auth.admin-login');
 });
 
 // Admin-only dashboard access
 Route::middleware(['auth', 'role:superadmin'])->group(function () {
+
     Route::get('/superadmin/dashboard', [SuperAdminAuthController::class, 'dashboard'])->name('superadmin.dashboard');
     Route::get('/superadmin/usermanage', [SuperAdminAuthController::class, 'usermanage'])->name('superadmin.usermanage');
     Route::post('/superadmin/logout', [SuperAdminAuthController::class, 'logout'])->name('superadmin.logout');
@@ -183,13 +191,17 @@ Route::middleware(['auth', 'role:superadmin'])->group(function () {
     Route::delete('/superadmin/audit-logs', [SuperAdminAuditLogController::class, 'clear'])->name('superadmin.audit-logs.clear');
 });
 
+
 /*
 |--------------------------------------------------------------------------
 | Scholarship Admin Routes
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'role:office,officer,admin,scholarship admin'])
-    ->prefix('scholarshipadmin')->name('scholarshipadmin.')->group(function () {
+    ->prefix('scholarshipadmin')
+    ->name('scholarshipadmin.')
+    ->group(function () {
+
         // Dashboard Route (Resolves to URL: /scholarshipadmin/dashboard, Name: scholarshipadmin.dashboard)
         Route::get('/dashboard', [ScholarshipAdminController::class, 'index'])->name('dashboard');
 
@@ -221,6 +233,9 @@ Route::middleware(['auth', 'role:office,officer,admin,scholarship admin'])
         // Reports & Analytics
         Route::get('/reports', [ScholarshipAdminReportController::class, 'index'])->name('reports');
 
+        // FIX: Added missing export route
+        Route::get('/reports/export', [ScholarshipAdminReportController::class, 'exportCsv'])->name('reports.export');
+
         // Announcements
         Route::get('/announcements', [ScholarshipAdminAnnouncementController::class, 'index'])->name('announcements');
         Route::post('/announcements', [ScholarshipAdminAnnouncementController::class, 'store'])->name('announcements.store');
@@ -231,13 +246,17 @@ Route::middleware(['auth', 'role:office,officer,admin,scholarship admin'])
         Route::put('/settings/password', [ScholarshipAdminSettingsController::class, 'updatePassword'])->name('settings.password');
     });
 
+
 /*
 |--------------------------------------------------------------------------
 | Registrar Routes (Stage 1: first-pass review of student applications)
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'role:school_registrar,registrar'])
-    ->prefix('registrar')->name('registrar.')->group(function () {
+    ->prefix('registrar')
+    ->name('registrar.')
+    ->group(function () {
+
         // Dashboard
         Route::get('/dashboard', [RegistrarController::class, 'index'])->name('dashboard');
 

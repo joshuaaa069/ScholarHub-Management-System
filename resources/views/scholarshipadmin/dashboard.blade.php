@@ -253,90 +253,85 @@
 
                 <!-- Graphs / Distributions Breakdowns Area Split Layout Grid -->
                 <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-                    <!-- Line Trend Analytics Card Component -->
+                    <!-- Applications Trend (data-driven) -->
                     <div
                         class="xl:col-span-2 bg-white rounded-2xl border border-slate-100 shadow-sm p-4 sm:p-6 flex flex-col justify-between">
                         <div class="flex items-center justify-between mb-4">
                             <h3 class="font-bold text-slate-900 text-sm">Applications Trend</h3>
-                            <select
-                                class="text-xs font-semibold bg-slate-50 text-slate-600 border border-slate-200 px-3 py-1.5 rounded-xl outline-none">
-                                <option>2026</option>
-                                <option>2025</option>
-                            </select>
+                            <span class="text-[10px] text-slate-400 font-medium">{{ number_format($applications->count()) }} endorsed</span>
                         </div>
 
-                        <div class="relative w-full h-56 flex items-end">
-                            <div
-                                class="absolute inset-0 flex flex-col justify-between text-slate-300 pointer-events-none pb-6 text-[10px] font-medium">
-                                <div class="w-full flex items-center justify-between border-b border-slate-50 pb-1">
-                                    <span>160</span>
-                                    <div class="w-full border-t border-dashed border-slate-100 ml-4"></div>
-                                </div>
-                                <div class="w-full flex items-center justify-between border-b border-slate-50 pb-1">
-                                    <span>120</span>
-                                    <div class="w-full border-t border-dashed border-slate-100 ml-4"></div>
-                                </div>
-                                <div class="w-full flex items-center justify-between border-b border-slate-50 pb-1">
-                                    <span>80</span>
-                                    <div class="w-full border-t border-dashed border-slate-100 ml-4"></div>
-                                </div>
-                                <div class="w-full flex items-center justify-between border-b border-slate-50 pb-1">
-                                    <span>40</span>
-                                    <div class="w-full border-t border-dashed border-slate-100 ml-4"></div>
-                                </div>
-                                <div class="w-full flex items-center justify-between border-b border-slate-50 pb-1">
-                                    <span>0</span>
-                                    <div class="w-full border-t border-dashed border-slate-100 ml-4"></div>
-                                </div>
+                        @php
+                            $monthlyTrend = $applications->groupBy(fn($a) => \Illuminate\Support\Carbon::parse($a->created_at)->format('M Y'))
+                                ->map(fn($group) => $group->count())
+                                ->sortKeys();
+                            $maxTrend = max(1, $monthlyTrend->max());
+                        @endphp
+
+                        @if($monthlyTrend->isNotEmpty())
+                            <div class="relative w-full h-44 flex items-end gap-1.5">
+                                @foreach($monthlyTrend as $month => $count)
+                                    @php $heightPct = ($count / $maxTrend) * 100; @endphp
+                                    <div class="flex-1 flex flex-col items-center justify-end h-full">
+                                        <div class="w-full bg-blue-500 hover:bg-blue-600 rounded-t-sm transition-all"
+                                            style="height: {{ max($heightPct, 6) }}%"
+                                            title="{{ $count }} application(s) in {{ $month }}">
+                                        </div>
+                                        <span class="text-[9px] text-slate-400 font-medium mt-1 truncate">{{ $month }}</span>
+                                    </div>
+                                @endforeach
                             </div>
-                            <svg class="absolute inset-x-0 bottom-6 h-40 w-full pr-4 pl-8" viewBox="0 0 100 100"
-                                preserveAspectRatio="none">
-                                <defs>
-                                    <linearGradient id="glow" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.1" />
-                                        <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.0" />
-                                    </linearGradient>
-                                </defs>
-                                <path
-                                    d="M 0,70 C 15,62 25,50 40,55 C 55,60 70,30 85,25 C 92,22 96,32 100,38 L 100,100 L 0,100 Z"
-                                    fill="url(#glow)"></path>
-                                <path d="M 0,70 C 15,62 25,50 40,55 C 55,60 70,30 85,25 C 92,22 96,32 100,38"
-                                    fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round"></path>
-                            </svg>
-                            <div
-                                class="absolute bottom-0 left-8 right-0 flex justify-between text-[10px] font-semibold text-slate-400">
-                                <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span>
+                        @else
+                            <div class="h-44 w-full flex flex-col items-center justify-center text-xs text-slate-400 bg-slate-50/50 rounded-xl border border-dashed border-slate-100">
+                                <span>No endorsed applications yet.</span>
                             </div>
-                        </div>
+                        @endif
                     </div>
 
-                    <!-- Pie Segment Breakdown Distribution Component Card -->
+                    <!-- Scholarship Distribution (data-driven) -->
                     <div
                         class="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 sm:p-6 flex flex-col justify-between">
                         <h3 class="font-bold text-slate-900 text-sm mb-4">Scholarship Distribution</h3>
+                        @php
+                            $pieColors = [
+                                'STEM'        => '#3b82f6',
+                                'Merit'       => '#10b981',
+                                'Need-Based'  => '#f59e0b',
+                                'Government'  => '#8b5cf6',
+                                'Corporate'   => '#ec4899',
+                            ];
+                            $pieRadius = 15.91;
+                            $pieCircumference = 2 * pi() * $pieRadius;
+                            $offset = 0;
+                        @endphp
                         <div class="flex items-center justify-center py-2">
                             <svg class="w-32 h-32" viewBox="0 0 36 36">
-                                <circle cx="18" cy="18" r="15.91" fill="none" stroke="#e2e8f0" stroke-width="4.2">
-                                </circle>
-                                <circle cx="18" cy="18" r="15.91" fill="none" stroke="#3b82f6" stroke-width="4.2"
-                                    stroke-dasharray="35 65" stroke-dashoffset="100"></circle>
-                                <circle cx="18" cy="18" r="15.91" fill="none" stroke="#10b981" stroke-width="4.2"
-                                    stroke-dasharray="25 75" stroke-dashoffset="65"></circle>
-                                <circle cx="18" cy="18" r="15.91" fill="none" stroke="#f59e0b" stroke-width="4.2"
-                                    stroke-dasharray="20 80" stroke-dashoffset="40"></circle>
-                                <circle cx="18" cy="18" r="15.91" fill="none" stroke="#8b5cf6" stroke-width="4.2"
-                                    stroke-dasharray="15 85" stroke-dashoffset="20"></circle>
+                                <circle cx="18" cy="18" r="{{ $pieRadius }}" fill="none" stroke="#e2e8f0" stroke-width="4.2"></circle>
+                                @foreach($distribution as $category => $pct)
+                                    @if($pct > 0)
+                                        @php
+                                            $dash = $pct;
+                                            $offsetVal = 100 - $pct - $offset;
+                                            $offset += $pct;
+                                        @endphp
+                                        <circle cx="18" cy="18" r="{{ $pieRadius }}" fill="none"
+                                            stroke="{{ $pieColors[$category] ?? '#94a3b8' }}" stroke-width="4.2"
+                                            stroke-dasharray="{{ $dash }} 100" stroke-dashoffset="{{ $offsetVal }}">
+                                        </circle>
+                                    @endif
+                                @endforeach
                             </svg>
                         </div>
                         <div class="grid grid-cols-2 gap-x-4 gap-y-1.5 text-[11px] font-bold text-slate-600 mt-4">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center space-x-1.5"><span
-                                        class="w-2.5 h-2.5 rounded-full bg-blue-500"></span><span>STEM</span></div>
-                            </div>
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center space-x-1.5"><span
-                                        class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span><span>Merit</span></div>
-                            </div>
+                            @foreach($distribution as $category => $pct)
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-1.5">
+                                        <span class="w-2.5 h-2.5 rounded-full" style="background-color: {{ $pieColors[$category] ?? '#94a3b8' }};"></span>
+                                        <span>{{ $category }}</span>
+                                    </div>
+                                    <span>{{ $pct }}%</span>
+                                </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -359,7 +354,7 @@
                                 </svg>
                                 <span>Filter</span>
                             </button>
-                            <button
+                            <a href="{{ route('scholarshipadmin.reports.export') }}"
                                 class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-3 py-2 rounded-xl transition flex items-center space-x-1.5 shadow-sm shadow-blue-600/10">
                                 <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                     stroke-width="2.5">
@@ -367,7 +362,7 @@
                                         d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                                 </svg>
                                 <span>Export</span>
-                            </button>
+                            </a>
                         </div>
                     </div>
 

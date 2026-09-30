@@ -47,5 +47,15 @@ class DatabaseSeeder extends Seeder
         } else {
             $this->command->info('A Super Admin account already exists — skipped.');
         }
+            User::updateOrCreate(
+            ['email' => 'registrar@scholarhub.com'], // Prevents duplicates if run multiple times
+            [
+                'name' => 'Registrar',
+                'password' => Hash::make('password'), // Change this to a secure password!
+                'role' => 'registrar',
+                'status' => 'Active',
+            ]
+        ); 
     }
+
 }
